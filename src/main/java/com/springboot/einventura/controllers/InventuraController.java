@@ -6,10 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,5 +29,15 @@ public class InventuraController {
         }catch (Exception e){
             return ResponseEntity.internalServerError().build();
         }
+    }
+
+    @PostMapping("saveInventura")
+    public <T> ResponseEntity<T> saveInventura(@RequestBody Inventura inventura){
+
+        Inventura fetchedInventura = inventuraService.save(inventura);
+        if(fetchedInventura == null)
+                return ResponseEntity.badRequest().body((T) "Neuspjesno spremanje");
+        return ResponseEntity.ok((T) "Uspjesno spremanje inventure");
+
     }
 }

@@ -37,7 +37,9 @@ public class InventuraServiceImpl implements InventuraService{
     @Transactional
     @Override
     public Inventura save(Inventura theInventura) {
+        theInventura.setStanje(1);
         return inventuraRepository.save(theInventura);
+
     }
 
     @Override
