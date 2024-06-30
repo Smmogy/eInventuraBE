@@ -41,8 +41,8 @@ public class Inventura {
             cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
             name = "raspored_inventura_djelatnici",
-            joinColumns = @JoinColumn(name = "inventura"),
-            inverseJoinColumns = @JoinColumn(name = "djelatnici")
+            joinColumns = @JoinColumn(name = "id_inventura"),
+            inverseJoinColumns = @JoinColumn(name = "id_djelatnik")
     )
     private List<Djelatnici> djelatniciList;
 

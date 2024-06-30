@@ -24,7 +24,8 @@ public class InventuraController {
 
     @GetMapping("findAll")
     public ResponseEntity<List<Inventura>> getAllInventura(){
-        try {
+        try
+        {
             return ResponseEntity.ok(inventuraService.findAll());
         }catch (Exception e){
             return ResponseEntity.internalServerError().build();

@@ -31,22 +31,18 @@ public class JwtService {
         return generateToken(new HashMap<>(), userDetails);
     }
 
-    public String generateToken(
-            Map<String, Object> extraClaims,
-            UserDetails userDetails
 
-    ) {
-        return Jwts
-                .builder()
-                .setClaims(extraClaims)
+    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>(extraClaims);
+        claims.put("sub", userDetails.getUsername());
+        claims.put("roles", userDetails.getAuthorities());
+        return Jwts.builder()
+                .setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
                 .signWith(getSingInKey(), SignatureAlgorithm.HS256)
                 .compact();
-
-
-
     }
     public boolean isTokenValid(String token, UserDetails userDetails){
         final String username = extractUsername(token);

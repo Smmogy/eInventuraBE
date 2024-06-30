@@ -30,15 +30,15 @@ class Djelatnici {
     private String telefon;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
-    private User id;
+    @JoinColumn(name = "id_user")
+    private User idUser;
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
             name = "raspored_inventura_djelatnici",
-            joinColumns = @JoinColumn(name = "djelatnici"),
-            inverseJoinColumns = @JoinColumn(name = "inventura")
+            joinColumns = @JoinColumn(name = "id_djelatnik"),
+            inverseJoinColumns = @JoinColumn(name = "id_inventura")
     )
     private List<Inventura> inventuraList;
 
@@ -46,8 +46,8 @@ class Djelatnici {
             cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
             name = "raspored_inventura_djelatnici",
-            joinColumns = @JoinColumn(name = "djelatnici"),
-            inverseJoinColumns = @JoinColumn(name = "raspored_inventura")
+            joinColumns = @JoinColumn(name = "id_djelatnik"),
+            inverseJoinColumns = @JoinColumn(name = "id_raspored")
     )
     private List<RasporedInventura> rasporedInventuraList;
 
