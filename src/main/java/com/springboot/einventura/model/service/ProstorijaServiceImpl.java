@@ -4,9 +4,11 @@ import com.springboot.einventura.model.repository.ProstorijaRepository;
 import com.springboot.einventura.model.bean.Prostorija;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+@Service
 
 public class ProstorijaServiceImpl implements ProstorijaService {
 
@@ -24,7 +26,7 @@ public class ProstorijaServiceImpl implements ProstorijaService {
     }
 
     @Override
-    public Optional<Prostorija> findById(int theId) {
+    public Optional<Prostorija> findById(Integer theId) {
         return prostorijaRepository.findById(theId);
     }
 
@@ -35,7 +37,11 @@ public class ProstorijaServiceImpl implements ProstorijaService {
     }
 
     @Override
-    public void deleteById(int theId) {
+    public void deleteById(Integer theId) {
         prostorijaRepository.deleteById(theId);
     }
+
 }
+
+
+

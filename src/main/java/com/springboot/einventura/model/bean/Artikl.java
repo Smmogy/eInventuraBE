@@ -13,17 +13,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="artikli")
+@Table(name= "artikl")
 public class Artikl {
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_artikl")
     private Integer idArtikl;
-    @Column(name = "naziv_artikl")
-    private String nazivArtikl;
-    @Column(name = "mjerna_jedinica")
-    private String mjernaJedinica;
-    @Column(name = "dobavljac")
-    private String dobavljac;
+
+    @Column(name = "name")
+    private String name;
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinColumn(name ="id_prostorija")
+    private Prostorija prostorija;
 
 }

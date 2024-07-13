@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -14,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "inventura")
+@Table(name= "inventura")
 public class Inventura {
 
     @Id
@@ -35,16 +36,10 @@ public class Inventura {
     private Integer akademskaGod;
 
     @Column(name = "stanje")
-    private Integer stanje;
+    private Long stanje;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinTable(
-            name = "raspored_inventura_djelatnici",
-            joinColumns = @JoinColumn(name = "id_inventura"),
-            inverseJoinColumns = @JoinColumn(name = "id_djelatnik")
-    )
-    private List<Djelatnici> djelatniciList;
-
+    @OneToOne( cascade = {CascadeType.REMOVE,CascadeType.DETACH,CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinColumn(name="id_inventura")
+    private Institution institution;
 
 }

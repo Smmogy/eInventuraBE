@@ -11,12 +11,12 @@ public interface InventuraService {
 
     List<Inventura> findAll();
 
-    Optional<Inventura> findById(int theId);
+    Optional<Inventura> findById(Integer theId);
 
     Inventura save(Inventura theInventura);
 
-    Optional<List<Inventura>> findAllByStanje(int stanje);
+    Optional<List<Inventura>> findAllByStanje(Integer stanje);
 
-    void deleteById(int theId);
+    void deleteById(Integer theId);
 
 }

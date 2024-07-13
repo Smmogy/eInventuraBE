@@ -30,25 +30,24 @@ public class InventuraServiceImpl implements InventuraService{
     }
 
     @Override
-    public Optional<Inventura> findById(int theId) {
+    public Optional<Inventura> findById(Integer theId) {
         return inventuraRepository.findById(theId);
     }
 
     @Transactional
     @Override
     public Inventura save(Inventura theInventura) {
-        theInventura.setStanje(1);
         return inventuraRepository.save(theInventura);
 
     }
 
     @Override
-    public void deleteById(int theId) {
+    public void deleteById(Integer theId) {
         inventuraRepository.deleteById(theId);
     }
 
     @Override
-    public Optional<List<Inventura>> findAllByStanje(int stanje){
+    public Optional<List<Inventura>> findAllByStanje(Integer stanje){
         return inventuraRepository.findByStanje(stanje);
     }
 

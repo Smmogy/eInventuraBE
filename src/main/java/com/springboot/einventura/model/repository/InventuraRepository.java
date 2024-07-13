@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface InventuraRepository extends JpaRepository<Inventura, Integer> {
-    Optional<List<Inventura>> findByStanje(int stanje);
+    Optional<List<Inventura>> findByStanje(Integer stanje);
 }

@@ -19,18 +19,22 @@ public class StanjeInventureServiceImpl implements StanjeInventureService {
 
     @Override
     public List<StanjeInventure> findAll() {
-        return stanjeInventureRepository.findAll();
+      //  return stanjeInventureRepository.findAll();
+        return null;
     }
 
     @Override
     public Optional<StanjeInventure> findById(int theId) {
-        return stanjeInventureRepository.findById(theId);
+       // return stanjeInventureRepository.findById(theId);
+        return null;
     }
 
     @Override
     public StanjeInventure save(StanjeInventure theStanjeInventure) {
-        return stanjeInventureRepository.save(theStanjeInventure);
+        //return stanjeInventureRepository.save(theStanjeInventure);
+        return null;
     }
+
 
     @Override
     public void deleteById(int theId) {

@@ -9,10 +9,11 @@ public interface ArtiklService {
 
     List<Artikl> findAll();
 
-    Optional<Artikl> findById(int theId);
+    Optional<Artikl> findById(Integer theId);
 
     Artikl save(Artikl theArtikl);
 
-    void deleteById(int theId);
+    void deleteById(Integer theId);
+
 
 }

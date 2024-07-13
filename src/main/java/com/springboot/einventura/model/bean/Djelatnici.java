@@ -33,14 +33,6 @@ class Djelatnici {
     @JoinColumn(name = "id_user")
     private User idUser;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinTable(
-            name = "raspored_inventura_djelatnici",
-            joinColumns = @JoinColumn(name = "id_djelatnik"),
-            inverseJoinColumns = @JoinColumn(name = "id_inventura")
-    )
-    private List<Inventura> inventuraList;
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})

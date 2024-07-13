@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/inventura")
@@ -40,5 +41,15 @@ public class InventuraController {
                 return ResponseEntity.badRequest().body((T) "Neuspjesno spremanje");
         return ResponseEntity.ok((T) "Uspjesno spremanje inventure");
 
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<Inventura> findById(@PathVariable Integer id) {
+        return inventuraService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable Integer id) {
+        inventuraService.deleteById(id);
     }
 }
