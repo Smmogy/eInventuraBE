@@ -28,7 +28,6 @@ public class ArtiklServiceImpl implements ArtiklService {
         return artiklRepository.findById(theId);
     }
 
-    @Transactional
     @Override
     public Artikl save(Artikl theArtikl) {
         return artiklRepository.save(theArtikl);

@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.Set;
 
 @Data
@@ -30,9 +31,18 @@ public class Institution {
     @JoinColumn(name = "id_inventura")
     private Inventura inventura;
 
-    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "id_prostorija")
-    private Set<Prostorija> prostorija;
-
     // Getters and Setters
+}
+
+class InstitutionDTO {
+    public Integer id;
+    public String name;
+    public List<ProstorijaDTO> prostorije;
+    public List<InventuraListDTO> inventure;
+}
+
+class InstitutionListDTO {
+    public Integer id;
+    public String name;
+    public Date dateOfLastInventura;
 }

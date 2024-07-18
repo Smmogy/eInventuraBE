@@ -25,7 +25,7 @@ public class Artikl {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name ="id_prostorija")
     private Prostorija prostorija;
 
