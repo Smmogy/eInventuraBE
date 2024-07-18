@@ -23,7 +23,7 @@ public class InventuraController {
 
     public InventuraController(InventuraService inventuraService) {this.inventuraService = inventuraService;}
 
-    @GetMapping("findAll")
+    @GetMapping
     public ResponseEntity<List<Inventura>> getAllInventura(){
         try
         {

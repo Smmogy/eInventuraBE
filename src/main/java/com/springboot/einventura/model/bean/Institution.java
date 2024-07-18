@@ -37,8 +37,8 @@ public class Institution {
 class InstitutionDTO {
     public Integer id;
     public String name;
-    public List<ProstorijaDTO> prostorije;
-    public List<InventuraListDTO> inventure;
+   // public List<ProstorijaDTO> prostorije;
+   // public List<InventuraListDTO> inventure;
 }
 
 class InstitutionListDTO {
