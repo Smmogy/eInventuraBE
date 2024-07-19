@@ -1,5 +1,6 @@
 package com.springboot.einventura.model.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,16 +22,17 @@ public class Prostorija {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_prostorija")
-    private Integer idProstorija;
+        private Integer idProstorija;
 
     @Column(name = "name")
     private String name;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_institution")
     private Institution institution;
 
-    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @OneToMany
     @JoinColumn(name = "id_prostorija")
-    private Set<Artikl> artikls;
+    private List<Artikl> artikls;
 }

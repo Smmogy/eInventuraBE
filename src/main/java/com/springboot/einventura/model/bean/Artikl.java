@@ -1,5 +1,6 @@
 package com.springboot.einventura.model.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +26,7 @@ public class Artikl {
     @Column(name = "name")
     private String name;
 
+    @JsonIgnore
     @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name ="id_prostorija")
     private Prostorija prostorija;

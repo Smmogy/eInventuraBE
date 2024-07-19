@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -30,6 +31,9 @@ public class Institution {
     @OneToOne
     @JoinColumn(name = "id_inventura")
     private Inventura inventura;
+
+    @OneToMany(mappedBy = "institution")
+    private List<Prostorija> prostorijas;
 
     // Getters and Setters
 }

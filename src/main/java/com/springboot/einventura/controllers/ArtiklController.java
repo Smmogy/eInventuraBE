@@ -1,7 +1,10 @@
 package com.springboot.einventura.controllers;
 
 import com.springboot.einventura.model.bean.Artikl;
+import com.springboot.einventura.model.bean.Institution;
+import com.springboot.einventura.model.bean.Prostorija;
 import com.springboot.einventura.model.service.ArtiklService;
+import com.springboot.einventura.model.service.ProstorijaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +22,8 @@ import java.util.Optional;
 public class ArtiklController {
     @Autowired
     private ArtiklService artiklService;
+    @Autowired
+    private ProstorijaService prostorijaService;
 
     @GetMapping
     public List<Artikl> findAll() {
@@ -40,5 +45,13 @@ public class ArtiklController {
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Integer id) {
         artiklService.deleteById(id);
+    }
+
+    @GetMapping("/get/{id}")
+    public ResponseEntity<List<Artikl>> getRoomsByInstitutionId(@PathVariable Integer id) {
+        Optional<Prostorija> prostorija = prostorijaService.findById(id);
+        return prostorija
+                .map(value -> ResponseEntity.ok(value.getArtikls()))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

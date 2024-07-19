@@ -2,6 +2,7 @@ package com.springboot.einventura.model.service;
 
 import com.springboot.einventura.model.bean.Institution;
 import com.springboot.einventura.model.repository.InstitutionRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ public class InstitutionServiceImpl implements InstitutionService{
     }
 
     @Override
+    @Transactional
     public Optional<Institution> findById(Integer id) {
         return institutionRepository.findById(id);
     }

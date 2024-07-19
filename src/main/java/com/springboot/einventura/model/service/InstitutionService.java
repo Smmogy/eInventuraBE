@@ -10,6 +10,7 @@ public interface InstitutionService {
 
     Optional<Institution> findById(Integer id);
 
+
     Institution save(Institution institution);
 
     void deleteById(Integer id);

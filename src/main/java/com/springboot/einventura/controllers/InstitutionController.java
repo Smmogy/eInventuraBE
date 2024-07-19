@@ -40,4 +40,11 @@ public class InstitutionController {
     public void deleteById(@PathVariable Integer id) {
         institutionService.deleteById(id);
     }
+
+    @PutMapping("/{id}")
+    public Institution update(@RequestBody Institution institution) {
+        return institutionService.save(institution);
+    }
+
+
 }

@@ -39,7 +39,12 @@ public class ProstorijaServiceImpl implements ProstorijaService {
     @Override
     public void deleteById(Integer theId) {
         prostorijaRepository.deleteById(theId);
-    }
+   }
+
+    @Override
+    public List<Prostorija> getRoomsByInstitutionId(Integer idInstitution) {
+        return null;
+   }
 
 }
 
