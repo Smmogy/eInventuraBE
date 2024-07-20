@@ -37,16 +37,3 @@ public class Institution {
 
     // Getters and Setters
 }
-
-class InstitutionDTO {
-    public Integer id;
-    public String name;
-   // public List<ProstorijaDTO> prostorije;
-   // public List<InventuraListDTO> inventure;
-}
-
-class InstitutionListDTO {
-    public Integer id;
-    public String name;
-    public Date dateOfLastInventura;
-}

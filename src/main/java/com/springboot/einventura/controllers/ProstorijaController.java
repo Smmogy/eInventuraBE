@@ -1,5 +1,6 @@
 package com.springboot.einventura.controllers;
 
+import com.springboot.einventura.model.DTO.ProstorijaDTO;
 import com.springboot.einventura.model.bean.Institution;
 import com.springboot.einventura.model.bean.Prostorija;
 import com.springboot.einventura.model.service.InstitutionService;
@@ -38,7 +39,7 @@ public class ProstorijaController {
     }
 
     @PostMapping
-    public Prostorija save(@RequestBody Prostorija prostorija) {
+    public Prostorija save(@RequestBody ProstorijaDTO prostorija) {
         return prostorijaService.save(prostorija);
     }
 
@@ -48,7 +49,7 @@ public class ProstorijaController {
     }
 
     @PutMapping("/{id}")
-    public Prostorija update(@RequestBody Prostorija prostorija) {
+    public Prostorija update(@RequestBody ProstorijaDTO prostorija) {
         return prostorijaService.save(prostorija);
     }
 

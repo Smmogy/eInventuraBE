@@ -1,6 +1,8 @@
 package com.springboot.einventura.model.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.springboot.einventura.model.DTO.ArtiklDTO;
+import com.springboot.einventura.model.DTO.ProstorijaDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,4 +33,7 @@ public class Artikl {
     @JoinColumn(name ="id_prostorija")
     private Prostorija prostorija;
 
+    public ArtiklDTO ToDTO() {
+        return new ArtiklDTO(idArtikl, name, prostorija.getIdProstorija());
+    }
 }

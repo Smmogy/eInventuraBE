@@ -1,6 +1,7 @@
 package com.springboot.einventura.model.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.springboot.einventura.model.DTO.ProstorijaDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +23,7 @@ public class Prostorija {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_prostorija")
-        private Integer idProstorija;
+    private Integer idProstorija;
 
     @Column(name = "name")
     private String name;
@@ -35,4 +36,8 @@ public class Prostorija {
     @OneToMany
     @JoinColumn(name = "id_prostorija")
     private List<Artikl> artikls;
+
+    public ProstorijaDTO ToDTO() {
+        return new ProstorijaDTO(idProstorija, name, institution.getIdInstitution());
+    }
 }
