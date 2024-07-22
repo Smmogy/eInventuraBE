@@ -1,5 +1,6 @@
 package com.springboot.einventura.controllers;
 
+import com.springboot.einventura.model.DTO.InstitutionDTO;
 import com.springboot.einventura.model.bean.Institution;
 import com.springboot.einventura.model.service.InstitutionService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,7 @@ public class InstitutionController {
     private InstitutionService institutionService;
 
     @GetMapping
-    public List<Institution> findAll() {
+    public List<InstitutionDTO> findAll() {
         return institutionService.findAll();
     }
 

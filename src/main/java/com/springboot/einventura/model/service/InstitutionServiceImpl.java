@@ -1,6 +1,8 @@
 package com.springboot.einventura.model.service;
 
+import com.springboot.einventura.model.DTO.InstitutionDTO;
 import com.springboot.einventura.model.bean.Institution;
+import com.springboot.einventura.model.bean.Inventura;
 import com.springboot.einventura.model.repository.InstitutionRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +17,8 @@ public class InstitutionServiceImpl implements InstitutionService{
     private InstitutionRepository institutionRepository;
 
     @Override
-    public List<Institution> findAll() {
-        return institutionRepository.findAll();
+    public List<InstitutionDTO> findAll() {
+        return institutionRepository.findAll().stream().map(Institution::toDTO).toList();
     }
 
     @Override

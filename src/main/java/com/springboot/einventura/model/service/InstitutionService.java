@@ -1,12 +1,13 @@
 package com.springboot.einventura.model.service;
 
+import com.springboot.einventura.model.DTO.InstitutionDTO;
 import com.springboot.einventura.model.bean.Institution;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface InstitutionService {
-    List<Institution> findAll();
+    List<InstitutionDTO> findAll();
 
     Optional<Institution> findById(Integer id);
 

@@ -1,5 +1,6 @@
 package com.springboot.einventura.controllers;
 
+import com.springboot.einventura.model.DTO.UserDTO;
 import com.springboot.einventura.model.bean.User;
 import com.springboot.einventura.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userRepository.findAll();
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List<UserDTO> users = userRepository.findAll().stream().map(User::toDTO).toList();
         return ResponseEntity.ok(users);
     }
 

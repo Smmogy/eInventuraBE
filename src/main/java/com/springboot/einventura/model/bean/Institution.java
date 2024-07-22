@@ -1,16 +1,15 @@
 package com.springboot.einventura.model.bean;
 
-import com.springboot.einventura.model.bean.Inventura;
-import com.springboot.einventura.model.bean.Prostorija;
+import com.springboot.einventura.model.DTO.InstitutionDTO;
+import com.springboot.einventura.model.DTO.InventuraDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -28,12 +27,21 @@ public class Institution {
     @Column(name = "name")
     private String name;
 
-    @OneToOne
-    @JoinColumn(name = "id_inventura")
-    private Inventura inventura;
+    @OneToMany(mappedBy = "institution", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Inventura> inventuras;
 
     @OneToMany(mappedBy = "institution")
     private List<Prostorija> prostorijas;
 
-    // Getters and Setters
+    public InstitutionDTO toDTO() {
+        return new InstitutionDTO(
+                idInstitution,
+                name,
+                inventuras.stream()
+                        .map(Inventura::getIdInventura)
+                        .collect(Collectors.toList()),
+                prostorijas.stream()
+                        .map(Prostorija::getIdProstorija)
+                        .collect(Collectors.toList()));
+    }
 }

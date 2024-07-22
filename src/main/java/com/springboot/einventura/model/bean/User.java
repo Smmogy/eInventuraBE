@@ -1,5 +1,7 @@
 package com.springboot.einventura.model.bean;
 
+import com.springboot.einventura.model.DTO.InventuraDTO;
+import com.springboot.einventura.model.DTO.UserDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -26,12 +29,29 @@ public class User implements UserDetails {
     private String lastname;
     private String email;
     private String password;
+
     @Enumerated(EnumType.STRING)
     private Roles role;
 
+    @ManyToMany(mappedBy = "users")
+    private List<Inventura> inventuras;
+
+    public UserDTO toDTO() {
+        return new UserDTO(
+                id,
+                firstname,
+                lastname,
+                email,
+                password,
+                inventuras.stream()
+                        .map(Inventura::getIdInventura)
+                        .collect(Collectors.toList())
+        );
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override

@@ -1,7 +1,8 @@
 package com.springboot.einventura.model.bean;
 
-
+import com.springboot.einventura.model.DTO.InventuraDTO;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -24,22 +26,48 @@ public class Inventura {
     private Integer idInventura;
 
     @Column(name = "naziv")
+    @NotNull
     private String naziv;
 
     @Column(name = "datum_pocetka")
+    @NotNull
     private String datumPocetka;
 
     @Column(name = "datum_zavrsetka")
+    @NotNull
     private String datumZavrsetka;
 
     @Column(name = "akademska_godina")
+    @NotNull
     private Integer akademskaGod;
 
     @Column(name = "stanje")
-    private Long stanje;
+    private Integer stanje;
 
-    @OneToOne( cascade = {CascadeType.REMOVE,CascadeType.DETACH,CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name="id_inventura")
+    @ManyToOne
+    @JoinColumn(name = "id_institution")
+    @NotNull
     private Institution institution;
 
+    @ManyToMany
+    @JoinTable(
+            name = "inventura_user",
+            joinColumns = @JoinColumn(name = "inventura_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> users = new ArrayList<>();
+
+    public InventuraDTO toDTO() {
+        return new InventuraDTO(
+                idInventura,
+                naziv,
+                datumPocetka,
+                datumZavrsetka,
+                akademskaGod,
+                users.stream()
+                        .map(User::getId)
+                        .collect(Collectors.toList()),
+                institution.getIdInstitution()
+        );
+    }
 }

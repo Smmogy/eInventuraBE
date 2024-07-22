@@ -1,6 +1,9 @@
 package com.springboot.einventura.controllers;
 
+import com.springboot.einventura.model.DTO.InventuraDTO;
+import com.springboot.einventura.model.DTO.ProstorijaDTO;
 import com.springboot.einventura.model.bean.Inventura;
+import com.springboot.einventura.model.bean.Prostorija;
 import com.springboot.einventura.model.service.InventuraService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,24 +27,19 @@ public class InventuraController {
     public InventuraController(InventuraService inventuraService) {this.inventuraService = inventuraService;}
 
     @GetMapping
-    public ResponseEntity<List<Inventura>> getAllInventura(){
-        try
-        {
-            return ResponseEntity.ok(inventuraService.findAll());
-        }catch (Exception e){
-            return ResponseEntity.internalServerError().build();
-        }
+    public List<InventuraDTO> getAllInventuras() {
+        return inventuraService.getAllInventuras();
     }
 
-    @PostMapping("saveInventura")
-    public <T> ResponseEntity<T> saveInventura(@RequestBody Inventura inventura){
-
-        Inventura fetchedInventura = inventuraService.save(inventura);
-        if(fetchedInventura == null)
-                return ResponseEntity.badRequest().body((T) "Neuspjesno spremanje");
-        return ResponseEntity.ok((T) "Uspjesno spremanje inventure");
-
+    @PostMapping
+    public InventuraDTO save(@RequestBody InventuraDTO inventuraDTO) {
+        return inventuraService.save(inventuraDTO).toDTO();
     }
+    @GetMapping("/user/{userId}")
+    public List<Inventura> getInventurasByUserId(@PathVariable Integer userId) {
+        return inventuraService.getInventurasByUserId(userId);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Inventura> findById(@PathVariable Integer id) {
         return inventuraService.findById(id)
