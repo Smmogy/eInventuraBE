@@ -26,6 +26,11 @@ public class InstitutionServiceImpl implements InstitutionService{
     public Optional<Institution> findById(Integer id) {
         return institutionRepository.findById(id);
     }
+    @Override
+    @Transactional
+    public Optional<InstitutionDTO> findByDTOId(Integer id) {
+        return institutionRepository.findById(id).map(Institution::toDTO);
+    }
 
     @Override
     public Institution save(Institution institution) {

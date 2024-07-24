@@ -26,8 +26,8 @@ public class InstitutionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Institution> findById(@PathVariable Integer id) {
-        return institutionService.findById(id)
+    public ResponseEntity<InstitutionDTO> findByDTOId(@PathVariable Integer id) {
+        return institutionService.findByDTOId(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

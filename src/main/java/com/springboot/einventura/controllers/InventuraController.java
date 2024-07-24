@@ -1,6 +1,8 @@
 package com.springboot.einventura.controllers;
 
 import com.springboot.einventura.model.DTO.InventuraDTO;
+import com.springboot.einventura.model.DTO.InventuraDetailDTO;
+import com.springboot.einventura.model.DTO.InventuraListDTO;
 import com.springboot.einventura.model.DTO.ProstorijaDTO;
 import com.springboot.einventura.model.bean.Inventura;
 import com.springboot.einventura.model.bean.Prostorija;
@@ -36,13 +38,19 @@ public class InventuraController {
         return inventuraService.save(inventuraDTO).toDTO();
     }
     @GetMapping("/user/{userId}")
-    public List<Inventura> getInventurasByUserId(@PathVariable Integer userId) {
-        return inventuraService.getInventurasByUserId(userId);
+    public List<InventuraListDTO> getInventurasByUserId(@PathVariable Integer userId) {
+        return inventuraService.getInventurasByUserId(userId).stream().map(Inventura::toListDTO).toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Inventura> findById(@PathVariable Integer id) {
+    public ResponseEntity<InventuraDTO> findById(@PathVariable Integer id) {
         return inventuraService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<InventuraDetailDTO> findByDetailId(@PathVariable Integer id) {
+        return inventuraService.findByDetailId(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

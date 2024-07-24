@@ -1,6 +1,7 @@
 package com.springboot.einventura.model.service;
 
 import com.springboot.einventura.model.DTO.InventuraDTO;
+import com.springboot.einventura.model.DTO.InventuraDetailDTO;
 import com.springboot.einventura.model.repository.InventuraRepository;
 import com.springboot.einventura.model.bean.Inventura;
 import org.springframework.stereotype.Service;
@@ -12,8 +13,9 @@ public interface InventuraService {
 
     List<Inventura> findAll();
 
-    Optional<Inventura> findById(Integer theId);
+    Optional<InventuraDTO> findById(Integer theId);
 
+    Optional<InventuraDetailDTO> findByDetailId(Integer theId);
     Inventura save(InventuraDTO dto);
 
     Optional<List<Inventura>> findAllByStanje(Integer stanje);

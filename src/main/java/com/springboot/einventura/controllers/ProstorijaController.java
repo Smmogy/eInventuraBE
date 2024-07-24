@@ -1,5 +1,6 @@
 package com.springboot.einventura.controllers;
 
+import com.springboot.einventura.model.DTO.InstitutionDTO;
 import com.springboot.einventura.model.DTO.ProstorijaDTO;
 import com.springboot.einventura.model.bean.Institution;
 import com.springboot.einventura.model.bean.Prostorija;

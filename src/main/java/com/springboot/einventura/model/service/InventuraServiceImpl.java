@@ -1,6 +1,7 @@
 package com.springboot.einventura.model.service;
 
 import com.springboot.einventura.model.DTO.InventuraDTO;
+import com.springboot.einventura.model.DTO.InventuraDetailDTO;
 import com.springboot.einventura.model.bean.Institution;
 import com.springboot.einventura.model.bean.Inventura;
 import com.springboot.einventura.model.bean.User;
@@ -34,8 +35,12 @@ public class InventuraServiceImpl implements InventuraService {
     }
 
     @Override
-    public Optional<Inventura> findById(Integer theId) {
-        return inventuraRepository.findById(theId);
+    public Optional<InventuraDTO> findById(Integer theId) {
+        return inventuraRepository.findById(theId).map(Inventura::toDTO);
+    }
+    @Override
+    public Optional<InventuraDetailDTO> findByDetailId(Integer theId) {
+        return inventuraRepository.findById(theId).map(Inventura::toDetailDTO);
     }
 
     @Override

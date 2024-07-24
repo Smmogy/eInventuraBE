@@ -1,7 +1,9 @@
 package com.springboot.einventura.model.bean;
 
 import com.springboot.einventura.model.DTO.InstitutionDTO;
+import com.springboot.einventura.model.DTO.InstitutionDetailDTO;
 import com.springboot.einventura.model.DTO.InventuraDTO;
+import com.springboot.einventura.model.DTO.ProstorijaDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,7 +29,7 @@ public class Institution {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "institution", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "institution")
     private List<Inventura> inventuras;
 
     @OneToMany(mappedBy = "institution")
@@ -43,5 +45,11 @@ public class Institution {
                 prostorijas.stream()
                         .map(Prostorija::getIdProstorija)
                         .collect(Collectors.toList()));
+    }
+    public InstitutionDetailDTO toDetailDTO() {
+        return new InstitutionDetailDTO(
+                idInstitution,
+                name,
+                prostorijas.stream().map(Prostorija::ToDetailDTO).toList());
     }
 }

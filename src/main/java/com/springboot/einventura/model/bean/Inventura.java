@@ -1,6 +1,9 @@
 package com.springboot.einventura.model.bean;
 
+import com.springboot.einventura.model.DTO.InstitutionDetailDTO;
 import com.springboot.einventura.model.DTO.InventuraDTO;
+import com.springboot.einventura.model.DTO.InventuraDetailDTO;
+import com.springboot.einventura.model.DTO.InventuraListDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -68,6 +71,27 @@ public class Inventura {
                         .map(User::getId)
                         .collect(Collectors.toList()),
                 institution.getIdInstitution()
+        );
+    }
+    public InventuraListDTO toListDTO() {
+        return new InventuraListDTO(
+                idInventura,
+                naziv,
+                datumPocetka,
+                datumZavrsetka,
+                akademskaGod,
+                institution.getName()
+        );
+
+    }
+    public InventuraDetailDTO toDetailDTO() {
+        return new InventuraDetailDTO(
+                idInventura,
+                naziv,
+                datumPocetka,
+                datumZavrsetka,
+                akademskaGod,
+                institution.toDetailDTO()
         );
     }
 }

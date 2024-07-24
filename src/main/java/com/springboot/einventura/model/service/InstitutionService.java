@@ -10,6 +10,7 @@ public interface InstitutionService {
     List<InstitutionDTO> findAll();
 
     Optional<Institution> findById(Integer id);
+    Optional<InstitutionDTO> findByDTOId(Integer id);
 
 
     Institution save(Institution institution);

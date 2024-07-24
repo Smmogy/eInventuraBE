@@ -44,5 +44,11 @@ public class UserController {
         userRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+    @GetMapping("/findByEmail/{email}")
+    public ResponseEntity<Integer> getUserIdByEmail(@PathVariable String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+        return ResponseEntity.ok(user.getId());
+    }
 }
 

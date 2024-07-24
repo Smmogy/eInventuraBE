@@ -2,6 +2,7 @@ package com.springboot.einventura.model.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.springboot.einventura.model.DTO.ProstorijaDTO;
+import com.springboot.einventura.model.DTO.ProstorijaDetailDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,5 +40,9 @@ public class Prostorija {
 
     public ProstorijaDTO ToDTO() {
         return new ProstorijaDTO(idProstorija, name, institution.getIdInstitution());
+    }
+
+    public ProstorijaDetailDTO ToDetailDTO() {
+        return new ProstorijaDetailDTO(idProstorija, name, artikls.stream().map(Artikl::ToDTO).toList());
     }
 }
