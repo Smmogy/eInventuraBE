@@ -32,7 +32,7 @@ public class Institution {
     @OneToMany(mappedBy = "institution")
     private List<Inventura> inventuras;
 
-    @OneToMany(mappedBy = "institution")
+    @OneToMany(mappedBy = "institution", cascade = CascadeType.REMOVE)
     private List<Prostorija> prostorijas;
 
     public InstitutionDTO toDTO() {
@@ -46,10 +46,10 @@ public class Institution {
                         .map(Prostorija::getIdProstorija)
                         .collect(Collectors.toList()));
     }
-    public InstitutionDetailDTO toDetailDTO() {
+    public InstitutionDetailDTO toDetailDTO(List<Integer> prisutniAritkli) {
         return new InstitutionDetailDTO(
                 idInstitution,
                 name,
-                prostorijas.stream().map(Prostorija::ToDetailDTO).toList());
+                prostorijas.stream().map((Prostorija p) -> p.ToDetailDTO(prisutniAritkli)).toList());
     }
 }

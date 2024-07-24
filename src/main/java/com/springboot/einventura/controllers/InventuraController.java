@@ -1,9 +1,6 @@
 package com.springboot.einventura.controllers;
 
-import com.springboot.einventura.model.DTO.InventuraDTO;
-import com.springboot.einventura.model.DTO.InventuraDetailDTO;
-import com.springboot.einventura.model.DTO.InventuraListDTO;
-import com.springboot.einventura.model.DTO.ProstorijaDTO;
+import com.springboot.einventura.model.DTO.*;
 import com.springboot.einventura.model.bean.Inventura;
 import com.springboot.einventura.model.bean.Prostorija;
 import com.springboot.einventura.model.service.InventuraService;
@@ -57,5 +54,11 @@ public class InventuraController {
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Integer id) {
         inventuraService.deleteById(id);
+    }
+
+    @PostMapping("/update-article-presence")
+    public ResponseEntity updateArticlePresence(@RequestBody ArtiklPrisutanDTO artiklPrisutanDTO) {
+        inventuraService.updateArticlePresence(artiklPrisutanDTO.getIdArtikl(), artiklPrisutanDTO.getIdInventura());
+        return ResponseEntity.ok().build();
     }
 }

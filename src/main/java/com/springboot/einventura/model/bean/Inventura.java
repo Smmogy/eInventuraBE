@@ -60,6 +60,14 @@ public class Inventura {
     )
     private List<User> users = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "inventura_prisutan_artikl",
+            joinColumns = @JoinColumn(name = "inventura_id"),
+            inverseJoinColumns = @JoinColumn(name = "artikl_id")
+    )
+    private List<Artikl> prisutniArtikli;
+
     public InventuraDTO toDTO() {
         return new InventuraDTO(
                 idInventura,
@@ -91,7 +99,7 @@ public class Inventura {
                 datumPocetka,
                 datumZavrsetka,
                 akademskaGod,
-                institution.toDetailDTO()
+                institution.toDetailDTO(prisutniArtikli.stream().map(Artikl::getIdArtikl).toList())
         );
     }
 }

@@ -42,7 +42,13 @@ public class Prostorija {
         return new ProstorijaDTO(idProstorija, name, institution.getIdInstitution());
     }
 
-    public ProstorijaDetailDTO ToDetailDTO() {
-        return new ProstorijaDetailDTO(idProstorija, name, artikls.stream().map(Artikl::ToDTO).toList());
+    public ProstorijaDetailDTO ToDetailDTO(List<Integer> prisutniAritkli) {
+        return new ProstorijaDetailDTO(
+                idProstorija,
+                name,
+                artikls.stream()
+                        .map((Artikl a) -> a.ToInventuraDTO(prisutniAritkli.contains(a.getIdArtikl())))
+                        .toList()
+        );
     }
 }

@@ -14,5 +14,5 @@ import java.util.List;
 public class ProstorijaDetailDTO {
     private Integer idProstorija;
     private String name;
-    private List<ArtiklDTO> artiklDTO;
+    private List<ArtiklInventuraDTO> artikls;
 }

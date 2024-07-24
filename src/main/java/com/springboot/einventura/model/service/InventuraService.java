@@ -1,5 +1,6 @@
 package com.springboot.einventura.model.service;
 
+import com.springboot.einventura.model.DTO.ArtiklPrisutanDTO;
 import com.springboot.einventura.model.DTO.InventuraDTO;
 import com.springboot.einventura.model.DTO.InventuraDetailDTO;
 import com.springboot.einventura.model.repository.InventuraRepository;
@@ -27,4 +28,8 @@ public interface InventuraService {
     void addUsersToInventura(Integer inventuraId, List<Integer> userIds);
 
     List<InventuraDTO> getAllInventuras();
+
+    void updateArticlePresence(int idArtikl, int idInventura);
+
+    void zavrsiInventuru(int idInventura);
 }

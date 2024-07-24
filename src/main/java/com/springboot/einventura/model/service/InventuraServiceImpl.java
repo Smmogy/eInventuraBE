@@ -1,10 +1,13 @@
 package com.springboot.einventura.model.service;
 
+import com.springboot.einventura.model.DTO.ArtiklPrisutanDTO;
 import com.springboot.einventura.model.DTO.InventuraDTO;
 import com.springboot.einventura.model.DTO.InventuraDetailDTO;
+import com.springboot.einventura.model.bean.Artikl;
 import com.springboot.einventura.model.bean.Institution;
 import com.springboot.einventura.model.bean.Inventura;
 import com.springboot.einventura.model.bean.User;
+import com.springboot.einventura.model.repository.ArtiklRepository;
 import com.springboot.einventura.model.repository.InstitutionRepository;
 import com.springboot.einventura.model.repository.InventuraRepository;
 import com.springboot.einventura.model.repository.UserRepository;
@@ -28,6 +31,9 @@ public class InventuraServiceImpl implements InventuraService {
 
     @Autowired
     private InstitutionRepository institutionRepository;
+
+    @Autowired
+    private ArtiklRepository artiklRepository;
 
     @Override
     public List<Inventura> findAll() {
@@ -106,5 +112,45 @@ public class InventuraServiceImpl implements InventuraService {
     @Override
     public List<InventuraDTO> getAllInventuras() {
         return inventuraRepository.findAll().stream().map(Inventura::toDTO).toList();
+    }
+
+    public void updateArticlePresence(int idArtikl, int idInventura) {
+        Optional<Inventura> inventura = inventuraRepository.findById(idInventura);
+        if (inventura.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inventura not found");
+        }
+
+        Optional<Artikl> artikl = artiklRepository.findById(idArtikl);
+        if (artikl.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Artikl not found");
+        }
+
+        if (!inventura.get().getPrisutniArtikli().contains(artikl.get())) {
+            inventura.get().getPrisutniArtikli().add(artikl.get());
+
+            inventuraRepository.save(inventura.get());
+        }
+    }
+
+    public void zavrsiInventuru(int idInventura) {
+        Optional<Inventura> inventura = inventuraRepository.findById(idInventura);
+        if (inventura.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inventura not found");
+        }
+
+        List<Integer> prisutniAritkls = inventura.get().getPrisutniArtikli()
+                .stream()
+                .map(Artikl::getIdArtikl)
+                .toList();
+
+        List<Artikl> nePrisutniArtikls = artiklRepository
+                .findByProstorijaInstiutionIdInstitution(inventura.get().getInstitution().getIdInstitution())
+                .stream()
+                .filter((Artikl a) -> !prisutniAritkls.contains(a.getIdArtikl()))
+                .toList();
+
+        nePrisutniArtikls.forEach((Artikl a) -> a.setOtpisan(true));
+
+        artiklRepository.saveAll(nePrisutniArtikls);
     }
 }
