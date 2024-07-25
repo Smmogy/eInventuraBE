@@ -1,9 +1,6 @@
 package com.springboot.einventura.model.service;
 
-import com.springboot.einventura.model.DTO.ArtiklPrisutanDTO;
-import com.springboot.einventura.model.DTO.InventuraDTO;
-import com.springboot.einventura.model.DTO.InventuraDetailDTO;
-import com.springboot.einventura.model.DTO.InventuraListDTO;
+import com.springboot.einventura.model.DTO.*;
 import com.springboot.einventura.model.bean.Artikl;
 import com.springboot.einventura.model.bean.Institution;
 import com.springboot.einventura.model.bean.Inventura;
@@ -20,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -76,6 +74,7 @@ public class InventuraServiceImpl implements InventuraService {
         model.setDatumZavrsetka(dto.getDatumZavrsetka());
         model.setAkademskaGod(dto.getAkademskaGod());
         model.setNaziv(dto.getNaziv());
+        model.setStanje(true);
 
         return inventuraRepository.save(model);
     }
@@ -86,15 +85,21 @@ public class InventuraServiceImpl implements InventuraService {
     }
 
     @Override
-    public Optional<List<Inventura>> findAllByStanje(Integer stanje) {
-        return inventuraRepository.findByStanje(stanje);
-    }
-
-    @Override
     public List<Inventura> getInventurasByUserId(Integer userId) {
         return userRepository.findById(userId)
                 .map(User::getInventuras)
                 .orElse(List.of());
+    }
+    @Override
+    public List<Inventura> getInventurasByUserIdByStanje(Integer userId) {
+         Optional<User> user = userRepository.findById(userId);
+         if(user.isEmpty()) {
+             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inventura not found");
+         }
+         return user.get().getInventuras()
+                    .stream()
+                    .filter(Inventura::getStanje)
+                    .toList();
     }
 
     @Override
@@ -113,6 +118,13 @@ public class InventuraServiceImpl implements InventuraService {
     @Override
     public List<InventuraListDTO> getAllInventuras() {
         return inventuraRepository.findAll().stream().map(Inventura::toListDTO).toList();
+
+    }
+    @Override
+    public List<InventuraStanjeDTO> getAllInventurasByStanje() {
+        return inventuraRepository.findByStanjeTrue().stream()
+                .map(Inventura::toStanjeDTO)
+                .toList();
     }
 
     public void updateArticlePresence(int idArtikl, int idInventura) {
@@ -139,6 +151,7 @@ public class InventuraServiceImpl implements InventuraService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inventura not found");
         }
 
+
         List<Integer> prisutniAritkls = inventura.get().getPrisutniArtikli()
                 .stream()
                 .map(Artikl::getIdArtikl)
@@ -151,7 +164,7 @@ public class InventuraServiceImpl implements InventuraService {
                 .toList();
 
         nePrisutniArtikls.forEach((Artikl a) -> a.setOtpisan(true));
-
+        inventura.get().setStanje(false);
         artiklRepository.saveAll(nePrisutniArtikls);
     }
 }

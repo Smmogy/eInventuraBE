@@ -7,6 +7,7 @@ import com.springboot.einventura.model.repository.ArtiklRepository;
 import com.springboot.einventura.model.bean.Artikl;
 import com.springboot.einventura.model.repository.ProstorijaRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,11 @@ public class ArtiklServiceImpl implements ArtiklService {
     @Override
     public Optional<Artikl> findById(Integer theId) {
         return artiklRepository.findById(theId);
+    }
+
+    @Override
+    public List<Artikl> findByProstorijaIdNeotpisani(Integer idProstorija) {
+        return artiklRepository.findByProstorijaIdProstorijaAndOtpisanFalse(idProstorija);
     }
 
     @Override

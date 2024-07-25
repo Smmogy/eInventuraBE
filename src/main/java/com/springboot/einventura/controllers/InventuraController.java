@@ -31,6 +31,11 @@ public class InventuraController {
         return inventuraService.getAllInventuras();
     }
 
+    @GetMapping("/stanje")
+    public List<InventuraStanjeDTO> getAllInventurasByStanje() {
+        return inventuraService.getAllInventurasByStanje();
+    }
+
     @PostMapping
     public InventuraDTO save(@RequestBody InventuraDTO inventuraDTO) {
         return inventuraService.save(inventuraDTO).toDTO();
@@ -39,6 +44,11 @@ public class InventuraController {
     public List<InventuraListDTO> getInventurasByUserId(@PathVariable Integer userId) {
         return inventuraService.getInventurasByUserId(userId).stream().map(Inventura::toListDTO).toList();
     }
+    @GetMapping("/stanje/user/{userId}")
+    public List<InventuraStanjeDTO> getInventurasByUserIdByStanje(@PathVariable Integer userId) {
+        return inventuraService.getInventurasByUserIdByStanje(userId).stream().map(Inventura::toStanjeDTO).toList();
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<InventuraDTO> findById(@PathVariable Integer id) {

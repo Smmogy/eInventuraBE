@@ -54,10 +54,7 @@ public class ArtiklController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<List<Artikl>> getArtiklsByProstorijaId(@PathVariable Integer id) {
-        Optional<Prostorija> prostorija = prostorijaService.findById(id);
-        return prostorija
-                .map(value -> ResponseEntity.ok(value.getArtikls()))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public List<Artikl> getArtiklsByProstorijaId(@PathVariable Integer id) {
+        return artiklService.findByProstorijaIdNeotpisani(id);
     }
 }

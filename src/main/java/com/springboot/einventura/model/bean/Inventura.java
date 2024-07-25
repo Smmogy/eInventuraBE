@@ -1,9 +1,6 @@
 package com.springboot.einventura.model.bean;
 
-import com.springboot.einventura.model.DTO.InstitutionDetailDTO;
-import com.springboot.einventura.model.DTO.InventuraDTO;
-import com.springboot.einventura.model.DTO.InventuraDetailDTO;
-import com.springboot.einventura.model.DTO.InventuraListDTO;
+import com.springboot.einventura.model.DTO.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -45,7 +42,7 @@ public class Inventura {
     private Integer akademskaGod;
 
     @Column(name = "stanje")
-    private Integer stanje;
+    private Boolean stanje;
 
     @ManyToOne
     @JoinColumn(name = "id_institution")
@@ -78,9 +75,11 @@ public class Inventura {
                 users.stream()
                         .map(User::getId)
                         .collect(Collectors.toList()),
-                institution.getIdInstitution()
+                institution.getIdInstitution(),
+                stanje
         );
     }
+
     public InventuraListDTO toListDTO() {
         return new InventuraListDTO(
                 idInventura,
@@ -92,6 +91,7 @@ public class Inventura {
         );
 
     }
+
     public InventuraDetailDTO toDetailDTO() {
         return new InventuraDetailDTO(
                 idInventura,
@@ -101,5 +101,18 @@ public class Inventura {
                 akademskaGod,
                 institution.toDetailDTO(prisutniArtikli.stream().map(Artikl::getIdArtikl).toList())
         );
+    }
+
+    public InventuraStanjeDTO toStanjeDTO() {
+        return new InventuraStanjeDTO(
+                idInventura,
+                naziv,
+                datumPocetka,
+                datumZavrsetka,
+                akademskaGod,
+                institution.getName(),
+                stanje
+        );
+
     }
 }

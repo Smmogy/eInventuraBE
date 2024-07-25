@@ -31,7 +31,7 @@ public class Artikl {
     private String name;
 
     @Column(name = "otpisan")
-    private Boolean otpisan;
+    private Boolean otpisan = false;
 
     @JsonIgnore
     @ManyToOne(cascade = {CascadeType.MERGE})

@@ -1,9 +1,6 @@
 package com.springboot.einventura.model.service;
 
-import com.springboot.einventura.model.DTO.ArtiklPrisutanDTO;
-import com.springboot.einventura.model.DTO.InventuraDTO;
-import com.springboot.einventura.model.DTO.InventuraDetailDTO;
-import com.springboot.einventura.model.DTO.InventuraListDTO;
+import com.springboot.einventura.model.DTO.*;
 import com.springboot.einventura.model.repository.InventuraRepository;
 import com.springboot.einventura.model.bean.Inventura;
 import org.springframework.stereotype.Service;
@@ -20,15 +17,17 @@ public interface InventuraService {
     Optional<InventuraDetailDTO> findByDetailId(Integer theId);
     Inventura save(InventuraDTO dto);
 
-    Optional<List<Inventura>> findAllByStanje(Integer stanje);
-
     void deleteById(Integer theId);
 
     List<Inventura> getInventurasByUserId(Integer userId);
 
+    List<Inventura> getInventurasByUserIdByStanje(Integer userId);
+
     void addUsersToInventura(Integer inventuraId, List<Integer> userIds);
 
     List<InventuraListDTO> getAllInventuras();
+
+    List<InventuraStanjeDTO> getAllInventurasByStanje();
 
     void updateArticlePresence(int idArtikl, int idInventura);
 

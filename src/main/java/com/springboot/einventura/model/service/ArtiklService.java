@@ -12,6 +12,8 @@ public interface ArtiklService {
 
     Optional<Artikl> findById(Integer theId);
 
+    List<Artikl> findByProstorijaIdNeotpisani(Integer idProstorija);
+
     Artikl save(ArtiklDTO dto);
 
     void deleteById(Integer theId);
