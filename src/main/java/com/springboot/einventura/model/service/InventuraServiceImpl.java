@@ -3,6 +3,7 @@ package com.springboot.einventura.model.service;
 import com.springboot.einventura.model.DTO.ArtiklPrisutanDTO;
 import com.springboot.einventura.model.DTO.InventuraDTO;
 import com.springboot.einventura.model.DTO.InventuraDetailDTO;
+import com.springboot.einventura.model.DTO.InventuraListDTO;
 import com.springboot.einventura.model.bean.Artikl;
 import com.springboot.einventura.model.bean.Institution;
 import com.springboot.einventura.model.bean.Inventura;
@@ -110,8 +111,8 @@ public class InventuraServiceImpl implements InventuraService {
     }
 
     @Override
-    public List<InventuraDTO> getAllInventuras() {
-        return inventuraRepository.findAll().stream().map(Inventura::toDTO).toList();
+    public List<InventuraListDTO> getAllInventuras() {
+        return inventuraRepository.findAll().stream().map(Inventura::toListDTO).toList();
     }
 
     public void updateArticlePresence(int idArtikl, int idInventura) {
@@ -144,7 +145,7 @@ public class InventuraServiceImpl implements InventuraService {
                 .toList();
 
         List<Artikl> nePrisutniArtikls = artiklRepository
-                .findByProstorijaInstiutionIdInstitution(inventura.get().getInstitution().getIdInstitution())
+                .findByProstorijaInstitutionIdInstitution(inventura.get().getInstitution().getIdInstitution())
                 .stream()
                 .filter((Artikl a) -> !prisutniAritkls.contains(a.getIdArtikl()))
                 .toList();

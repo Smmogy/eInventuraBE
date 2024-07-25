@@ -26,7 +26,7 @@ public class InventuraController {
     public InventuraController(InventuraService inventuraService) {this.inventuraService = inventuraService;}
 
     @GetMapping
-    public List<InventuraDTO> getAllInventuras() {
+    public List<InventuraListDTO> getAllInventuras() {
         return inventuraService.getAllInventuras();
     }
 
@@ -53,7 +53,7 @@ public class InventuraController {
     }
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Integer id) {
-        inventuraService.deleteById(id);
+        inventuraService.   deleteById(id);
     }
 
     @PostMapping("/update-article-presence")

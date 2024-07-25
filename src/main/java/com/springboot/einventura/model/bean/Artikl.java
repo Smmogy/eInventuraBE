@@ -30,6 +30,9 @@ public class Artikl {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "otpisan")
+    private Boolean otpisan;
+
     @JsonIgnore
     @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name ="id_prostorija")
