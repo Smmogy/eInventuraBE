@@ -99,7 +99,8 @@ public class Inventura {
                 datumPocetka,
                 datumZavrsetka,
                 akademskaGod,
-                institution.toDetailDTO(prisutniArtikli.stream().map(Artikl::getIdArtikl).toList())
+                institution.toDetailDTO(prisutniArtikli.stream().map(Artikl::getIdArtikl).toList()),
+                stanje
         );
     }
 

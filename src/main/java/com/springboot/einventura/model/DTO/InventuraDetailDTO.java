@@ -18,5 +18,6 @@ public class InventuraDetailDTO {
     private String datumZavrsetka;
     private Integer akademskaGod;
     private InstitutionDetailDTO institution;
+    boolean stanje;
 
 }

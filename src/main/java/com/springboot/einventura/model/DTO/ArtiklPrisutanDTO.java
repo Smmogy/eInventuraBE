@@ -13,4 +13,5 @@ import lombok.NoArgsConstructor;
 public class ArtiklPrisutanDTO {
     private Integer idArtikl;
     private Integer idInventura;
+    private Boolean prisutan;
 }

@@ -29,7 +29,7 @@ public interface InventuraService {
 
     List<InventuraStanjeDTO> getAllInventurasByStanje();
 
-    void updateArticlePresence(int idArtikl, int idInventura);
+    void updateArticlePresence(int idArtikl, int idInventura, boolean prisutan);
 
     void zavrsiInventuru(int idInventura);
 }

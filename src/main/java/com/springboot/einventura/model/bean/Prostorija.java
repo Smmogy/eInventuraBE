@@ -47,6 +47,7 @@ public class Prostorija {
                 idProstorija,
                 name,
                 artikls.stream()
+                        .filter((Artikl a) -> !a.getOtpisan())
                         .map((Artikl a) -> a.ToInventuraDTO(prisutniAritkli.contains(a.getIdArtikl())))
                         .toList()
         );
