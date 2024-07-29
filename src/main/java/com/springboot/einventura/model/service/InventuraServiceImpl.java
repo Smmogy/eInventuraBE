@@ -17,7 +17,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -130,12 +129,15 @@ public class InventuraServiceImpl implements InventuraService {
     public void updateArticlePresence(int idArtikl, int idInventura, boolean prisutan) {
         Optional<Inventura> inventura = inventuraRepository.findById(idInventura);
         if (inventura.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inventura not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inventory not found");
+        }
+        if(inventura.get().getStanje() == false){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Inventory is already finished");
         }
 
         Optional<Artikl> artikl = artiklRepository.findById(idArtikl);
         if (artikl.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Artikl not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Articles not found");
         }
 
         if (prisutan){
@@ -153,9 +155,11 @@ public class InventuraServiceImpl implements InventuraService {
     public void zavrsiInventuru(int idInventura) {
         Optional<Inventura> inventura = inventuraRepository.findById(idInventura);
         if (inventura.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inventura not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inventory not found");
         }
-
+        if(inventura.get().getStanje() == false){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Inventory is already finished");
+        }
 
         List<Integer> prisutniAritkls = inventura.get().getPrisutniArtikli()
                 .stream()
