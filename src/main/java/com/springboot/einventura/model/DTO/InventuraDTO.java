@@ -1,9 +1,5 @@
 package com.springboot.einventura.model.DTO;
 
-import com.springboot.einventura.model.bean.Djelatnici;
-import com.springboot.einventura.model.bean.Inventura;
-import com.springboot.einventura.model.bean.User;
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
