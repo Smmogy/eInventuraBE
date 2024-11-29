@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/inventura")
@@ -22,9 +21,7 @@ import java.util.Optional;
 public class InventuraController {
 
     @Autowired
-    private final InventuraService inventuraService;
-
-    public InventuraController(InventuraService inventuraService) {this.inventuraService = inventuraService;}
+    private InventuraService inventuraService;
 
     @GetMapping
     public List<InventuraListDTO> getAllInventuras() {

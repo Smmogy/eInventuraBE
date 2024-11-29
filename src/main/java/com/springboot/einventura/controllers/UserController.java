@@ -13,12 +13,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-    private final UserRepository userRepository;
-
     @Autowired
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private  UserRepository userRepository;
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers() {

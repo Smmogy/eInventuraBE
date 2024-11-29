@@ -12,7 +12,6 @@ public interface InstitutionService {
     Optional<Institution> findById(Integer id);
     Optional<InstitutionDTO> findByDTOId(Integer id);
 
-
     Institution save(Institution institution);
 
     void deleteById(Integer id);
