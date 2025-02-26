@@ -16,5 +16,4 @@ public class ProstorijaUserDTO {
     private String name;
     private List<Integer> usersIds;
 
-    private List<Integer> usersIdsss;
 }
