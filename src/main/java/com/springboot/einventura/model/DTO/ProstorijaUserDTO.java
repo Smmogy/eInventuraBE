@@ -15,4 +15,6 @@ public class ProstorijaUserDTO {
     private Integer idProstorija;
     private String name;
     private List<Integer> usersIds;
+
+    private List<Integer> usersIdsss;
 }
