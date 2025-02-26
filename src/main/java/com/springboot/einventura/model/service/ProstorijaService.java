@@ -1,6 +1,7 @@
 package com.springboot.einventura.model.service;
 
 import com.springboot.einventura.model.DTO.ProstorijaDTO;
+import com.springboot.einventura.model.DTO.ProstorijaUserDTO;
 import com.springboot.einventura.model.bean.Prostorija;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ public interface ProstorijaService {
     Optional<Prostorija> findById(Integer theId);
 
     Prostorija save(ProstorijaDTO theProstorija);
+
+    Prostorija saveUserid(ProstorijaUserDTO theProstorija);
 
     void deleteById(Integer theId);
 

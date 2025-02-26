@@ -3,6 +3,7 @@ package com.springboot.einventura.model.bean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.springboot.einventura.model.DTO.ProstorijaDTO;
 import com.springboot.einventura.model.DTO.ProstorijaDetailDTO;
+import com.springboot.einventura.model.DTO.ProstorijaUserDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Data
@@ -34,6 +36,14 @@ public class Prostorija {
     @JoinColumn(name = "id_institution")
     private Institution institution;
 
+    @ManyToMany
+    @JoinTable(
+            name = "prostorija_user",
+            joinColumns = @JoinColumn(name = "id_prostorija"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> users = new ArrayList<>();
+
     @OneToMany
     @JoinColumn(name = "id_prostorija")
     private List<Artikl> artikls;
@@ -50,6 +60,15 @@ public class Prostorija {
                         .filter((Artikl a) -> !a.getOtpisan())
                         .map((Artikl a) -> a.ToInventuraDTO(prisutniAritkli.contains(a.getIdArtikl())))
                         .toList()
+        );
+    }
+    public ProstorijaUserDTO toUserDTO(List<Integer> prisutniUser) {
+        return new ProstorijaUserDTO(
+                idProstorija,
+                name,
+                users.stream()
+                        .map(User::getId)
+                        .collect(Collectors.toList())
         );
     }
 }

@@ -1,10 +1,13 @@
 package com.springboot.einventura.model.service;
 
 import com.springboot.einventura.model.DTO.ProstorijaDTO;
+import com.springboot.einventura.model.DTO.ProstorijaUserDTO;
 import com.springboot.einventura.model.bean.Institution;
+import com.springboot.einventura.model.bean.User;
 import com.springboot.einventura.model.repository.InstitutionRepository;
 import com.springboot.einventura.model.repository.ProstorijaRepository;
 import com.springboot.einventura.model.bean.Prostorija;
+import com.springboot.einventura.model.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +25,9 @@ public class ProstorijaServiceImpl implements ProstorijaService {
     private ProstorijaRepository prostorijaRepository;
     @Autowired
     private InstitutionRepository institutionRepository;
+    @Autowired
+    private UserRepository userRepository;
+
 
     @Override
     public List<Prostorija> findAll() {
@@ -63,6 +69,26 @@ public class ProstorijaServiceImpl implements ProstorijaService {
 
         return prostorijaRepository.save(model);
     }
+
+    @Override
+    public Prostorija saveUserid(ProstorijaUserDTO theProstorija) {
+        Prostorija model;
+
+        // Check if the Prostorija (room) already exists
+        if (theProstorija.getIdProstorija() == 0) {
+            model = new Prostorija();
+        } else {
+            model = prostorijaRepository.findById(theProstorija.getIdProstorija())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Room not found"));
+        }
+        List<User> users = userRepository.findAllById(theProstorija.getUsersIds());
+        if (users.size() != theProstorija.getUsersIds().size()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Some users not found");
+        }
+        model.setUsers(users);
+        return prostorijaRepository.save(model);
+    }
+
 
     @Override
     public void deleteById(Integer theId) {
