@@ -1,6 +1,7 @@
 package com.springboot.einventura.model.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.springboot.einventura.model.DTO.ProstorijaArtiklDTO;
 import com.springboot.einventura.model.DTO.ProstorijaDTO;
 import com.springboot.einventura.model.DTO.ProstorijaDetailDTO;
 import com.springboot.einventura.model.DTO.ProstorijaUserDTO;
@@ -46,6 +47,10 @@ public class Prostorija {
 
     @OneToMany
     @JoinColumn(name = "id_prostorija")
+    private List<Artikl> artikli = new ArrayList<>();
+
+    @OneToMany
+    @JoinColumn(name = "id_prostorija")
     private List<Artikl> artikls;
 
     public ProstorijaDTO ToDTO() {
@@ -62,6 +67,17 @@ public class Prostorija {
                         .toList()
         );
     }
+
+    public ProstorijaArtiklDTO ToArtiklDTO(List<Integer> prisutniAritkli) {
+        return new ProstorijaArtiklDTO(
+                name,
+                artikls.stream()
+                        .map(Artikl::getIdArtikl)
+                        .toList()
+        );
+
+    }
+
     public ProstorijaUserDTO toUserDTO(List<Integer> prisutniUser) {
         return new ProstorijaUserDTO(
                 idProstorija,

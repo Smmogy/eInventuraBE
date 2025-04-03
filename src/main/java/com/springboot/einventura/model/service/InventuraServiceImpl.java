@@ -1,21 +1,17 @@
 package com.springboot.einventura.model.service;
 
 import com.springboot.einventura.model.DTO.*;
-import com.springboot.einventura.model.bean.Artikl;
-import com.springboot.einventura.model.bean.Institution;
-import com.springboot.einventura.model.bean.Inventura;
-import com.springboot.einventura.model.bean.User;
-import com.springboot.einventura.model.repository.ArtiklRepository;
-import com.springboot.einventura.model.repository.InstitutionRepository;
-import com.springboot.einventura.model.repository.InventuraRepository;
-import com.springboot.einventura.model.repository.UserRepository;
+import com.springboot.einventura.model.bean.*;
+import com.springboot.einventura.model.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -32,6 +28,9 @@ public class InventuraServiceImpl implements InventuraService {
 
     @Autowired
     private ArtiklRepository artiklRepository;
+
+    @Autowired
+    private ProstorijaRepository prostorijaRepository;
 
     @Override
     public List<Inventura> findAll() {
@@ -171,6 +170,24 @@ public class InventuraServiceImpl implements InventuraService {
                 .stream()
                 .filter((Artikl a) -> !prisutniAritkls.contains(a.getIdArtikl()))
                 .toList();
+
+        Institution institution = inventura.get().getInstitution();
+        List<Prostorija> prostorije = institution.getProstorijas();
+        Map<String, List<Integer>> prostorijaArtikliMap = new HashMap<>();
+
+        for (Prostorija prostorija : prostorije) {
+
+            List<Integer> allArtikls = artiklRepository.findByProstorijaIdProstorijaAndOtpisanFalse(prostorija.getIdProstorija())
+                    .stream()
+                    .map(Artikl::getIdArtikl)
+                    .toList();
+
+            ProstorijaArtiklDTO dto = new ProstorijaArtiklDTO(prostorija.getName(), allArtikls);
+            List<Artikl> artikli = artiklRepository.findAllById(allArtikls);
+            prostorija.setArtikli(artikli);
+            prostorijaRepository.save(prostorija);
+        }
+
 
         nePrisutniArtikls.forEach((Artikl a) -> a.setOtpisan(true));
         inventura.get().setStanje(false);

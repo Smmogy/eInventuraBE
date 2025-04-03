@@ -8,11 +8,14 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class ProstorijaUserDTO {
-    private Integer idProstorija;
-    private String name;
-    private List<Integer> usersIds;
-}
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public class ProstorijaArtiklDTO {
+        private String name;
+        private List<Integer> idArtikls;
+
+    }
+
+
+
