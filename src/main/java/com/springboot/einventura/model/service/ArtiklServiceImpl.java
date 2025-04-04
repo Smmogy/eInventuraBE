@@ -73,6 +73,18 @@ public class ArtiklServiceImpl implements ArtiklService {
         artiklRepository.deleteById(theId);
     }
 
+    @Override
+    public void premjestiArtikl(Integer artiklId, Integer novaProstorijaId) {
+        Artikl artikl = artiklRepository.findById(artiklId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Artikl ne postoji"));
+
+        Prostorija novaProstorija = prostorijaRepository.findById(novaProstorijaId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Prostorija ne postoji"));
+
+        artikl.setProstorija(novaProstorija);
+        artiklRepository.save(artikl);
+    }
+
 
 }
 

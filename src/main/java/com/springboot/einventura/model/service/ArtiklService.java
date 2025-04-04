@@ -18,5 +18,8 @@ public interface ArtiklService {
 
     void deleteById(Integer theId);
 
+    void premjestiArtikl(Integer artiklId, Integer novaProstorijaId);
+
+
 
 }
