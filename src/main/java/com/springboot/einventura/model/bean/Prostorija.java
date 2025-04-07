@@ -1,10 +1,7 @@
 package com.springboot.einventura.model.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.springboot.einventura.model.DTO.ProstorijaArtiklDTO;
-import com.springboot.einventura.model.DTO.ProstorijaDTO;
-import com.springboot.einventura.model.DTO.ProstorijaDetailDTO;
-import com.springboot.einventura.model.DTO.ProstorijaUserDTO;
+import com.springboot.einventura.model.DTO.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -77,6 +74,14 @@ public class Prostorija {
         );
 
     }
+
+    public ProstorijaInstitucijaDTO toProstorijaInstitucijaDTO() {
+        return ProstorijaInstitucijaDTO.builder()
+                .idProstorija(this.idProstorija)
+                .idInstitution(this.institution != null ? this.institution.getIdInstitution() : null)
+                .build();
+    }
+
 
     public ProstorijaUserDTO toUserDTO(List<Integer> prisutniUser) {
         return new ProstorijaUserDTO(

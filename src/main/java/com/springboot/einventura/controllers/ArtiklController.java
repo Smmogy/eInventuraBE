@@ -58,11 +58,10 @@ public class ArtiklController {
         return artiklService.findByProstorijaIdNeotpisani(id);
     }
 
-    @PutMapping("/premjesti/{artiklId}/{novaProstorijaId}")
-    public ResponseEntity<String> premjestiArtikl(
-            @PathVariable Integer artiklId,
-            @PathVariable Integer novaProstorijaId) {
-        artiklService.premjestiArtikl(artiklId, novaProstorijaId);
-        return ResponseEntity.ok("Artikl premješten u novu prostoriju!");
+    @GetMapping("/prostorija-dto/{idArtikl}")
+    public ResponseEntity<ArtiklDTO> getProstorijaDTOByArtiklId(@PathVariable Integer idArtikl) {
+        ArtiklDTO dto = artiklService.findProstorijaDTOByArtiklId(idArtikl);
+        return ResponseEntity.ok(dto);
     }
+
 }

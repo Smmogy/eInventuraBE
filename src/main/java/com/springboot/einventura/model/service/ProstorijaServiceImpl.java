@@ -1,6 +1,7 @@
 package com.springboot.einventura.model.service;
 
 import com.springboot.einventura.model.DTO.ProstorijaDTO;
+import com.springboot.einventura.model.DTO.ProstorijaInstitucijaDTO;
 import com.springboot.einventura.model.DTO.ProstorijaUserDTO;
 import com.springboot.einventura.model.bean.Institution;
 import com.springboot.einventura.model.bean.User;
@@ -99,6 +100,23 @@ public class ProstorijaServiceImpl implements ProstorijaService {
     public List<Prostorija> getRoomsByInstitutionId(Integer idInstitution) {
         return null;
    }
+
+    @Override
+    public ProstorijaInstitucijaDTO getInstitutionIdFromProstorijaId(Integer idProstorija) {
+        Optional<Prostorija> optionalProstorija = prostorijaRepository.findById(idProstorija);
+
+        if (optionalProstorija.isEmpty()) {
+            throw new RuntimeException("Prostorija s ID-em " + idProstorija + " nije pronađena.");
+        }
+
+        Prostorija prostorija = optionalProstorija.get();
+        Institution institution = prostorija.getInstitution();
+
+        return ProstorijaInstitucijaDTO.builder()
+                .idProstorija(prostorija.getIdProstorija())
+                .idInstitution(institution.getIdInstitution())
+                .build();
+    }
 
 }
 

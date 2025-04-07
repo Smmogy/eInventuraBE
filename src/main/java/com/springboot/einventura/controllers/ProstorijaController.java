@@ -1,9 +1,6 @@
 package com.springboot.einventura.controllers;
 
-import com.springboot.einventura.model.DTO.InstitutionDTO;
-import com.springboot.einventura.model.DTO.InventuraDTO;
-import com.springboot.einventura.model.DTO.ProstorijaDTO;
-import com.springboot.einventura.model.DTO.ProstorijaUserDTO;
+import com.springboot.einventura.model.DTO.*;
 import com.springboot.einventura.model.bean.Institution;
 import com.springboot.einventura.model.bean.Prostorija;
 import com.springboot.einventura.model.bean.User;
@@ -84,4 +81,13 @@ public class ProstorijaController {
                 .map(value -> ResponseEntity.ok(value.getProstorijas())).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/institution-by-room/{idProstorija}")
+    public ResponseEntity<ProstorijaInstitucijaDTO> getInstitutionFromRoom(@PathVariable Integer idProstorija) {
+        try {
+            ProstorijaInstitucijaDTO dto = prostorijaService.getInstitutionIdFromProstorijaId(idProstorija);
+            return ResponseEntity.ok(dto);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
