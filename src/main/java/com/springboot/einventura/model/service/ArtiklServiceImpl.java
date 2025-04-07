@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class ArtiklServiceImpl implements ArtiklService {
     @Autowired
@@ -44,8 +45,7 @@ public class ArtiklServiceImpl implements ArtiklService {
 
         if (dto.getIdArtikl() == 0) {
             model = new Artikl();
-        }
-        else {
+        } else {
             Optional<Artikl> modelOpt = artiklRepository.findById(dto.getIdArtikl());
             if (!modelOpt.isPresent()) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -54,14 +54,12 @@ public class ArtiklServiceImpl implements ArtiklService {
             model = modelOpt.get();
         }
 
-        if (dto.getIdArtikl() == 0) {
-            Optional<Prostorija> prostorija = prostorijaRepository.findById(dto.getIdProstorija());
-            if (!prostorija.isPresent()) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-            }
-
-            model.setProstorija(prostorija.get());
+        Optional<Prostorija> prostorija = prostorijaRepository.findById(dto.getIdProstorija());
+        if (!prostorija.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+
+        model.setProstorija(prostorija.get());
 
         model.setName(dto.getName());
 
