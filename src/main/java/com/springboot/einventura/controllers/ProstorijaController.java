@@ -63,6 +63,23 @@ public class ProstorijaController {
         return prostorijaService.save(prostorija);
     }
 
+    @PostMapping("/saveWithUsers")
+    public ResponseEntity<ProstorijaUserDTO> saveRoomWithUsers(@RequestBody ProstorijaUserDTO dto) {
+        Prostorija saved = prostorijaService.saveUserid(dto);
+
+        List<Integer> userIds = saved.getUsers().stream()
+                .map(User::getId)
+                .collect(Collectors.toList());
+    
+        ProstorijaUserDTO responseDTO = ProstorijaUserDTO.builder()
+                .idProstorija(saved.getIdProstorija())
+                .name(saved.getName())
+                .usersIds(userIds)
+                .build();
+
+        return ResponseEntity.ok(responseDTO);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Integer id) {
         prostorijaService.deleteById(id);

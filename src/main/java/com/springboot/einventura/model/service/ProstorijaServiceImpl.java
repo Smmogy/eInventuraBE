@@ -75,7 +75,6 @@ public class ProstorijaServiceImpl implements ProstorijaService {
     public Prostorija saveUserid(ProstorijaUserDTO theProstorija) {
         Prostorija model;
 
-        // Check if the Prostorija (room) already exists
         if (theProstorija.getIdProstorija() == 0) {
             model = new Prostorija();
         } else {
