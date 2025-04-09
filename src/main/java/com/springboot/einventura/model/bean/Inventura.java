@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name= "inventura")
+@Table(name = "inventura")
 public class Inventura {
 
     @Id
@@ -64,6 +64,9 @@ public class Inventura {
             inverseJoinColumns = @JoinColumn(name = "artikl_id")
     )
     private List<Artikl> prisutniArtikli;
+
+    @OneToMany(mappedBy = "inventura", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<InventuraProstorijaUser> inventuraProstorijaUsers = new ArrayList<>();
 
     public InventuraDTO toDTO() {
         return new InventuraDTO(

@@ -9,10 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
@@ -32,6 +29,12 @@ public class InventuraServiceImpl implements InventuraService {
     @Autowired
     private ProstorijaRepository prostorijaRepository;
 
+    @Autowired
+    private ProstorijaService prostorijaService;
+
+    @Autowired
+    private InventuraProstorijaUserRepository inventuraProstorijaUserRepository;
+
     @Override
     public List<Inventura> findAll() {
         return inventuraRepository.findAll();
@@ -41,13 +44,15 @@ public class InventuraServiceImpl implements InventuraService {
     public Optional<InventuraDTO> findById(Integer theId) {
         return inventuraRepository.findById(theId).map(Inventura::toDTO);
     }
+
     @Override
     public Optional<InventuraDetailDTO> findByDetailId(Integer theId) {
         return inventuraRepository.findById(theId).map(Inventura::toDetailDTO);
     }
 
     @Override
-    public Inventura save(InventuraDTO dto) {
+    @Transactional
+    public InventuraDTO save(Probno dto) {
         Inventura model;
 
         if (dto.getIdInventura() == 0) {
@@ -73,8 +78,24 @@ public class InventuraServiceImpl implements InventuraService {
         model.setAkademskaGod(dto.getAkademskaGod());
         model.setNaziv(dto.getNaziv());
         model.setStanje(true);
+        
+        inventuraRepository.save(model);
 
-        return inventuraRepository.save(model);
+        dto.getRoomUserMap().forEach((roomId, userIds) -> {
+            for (User userId : userIds) {
+                Integer id = userId.getId();
+
+                InventuraProstorijaUser inventuraProstorijaUser = InventuraProstorijaUser.builder()
+                        .inventura(model)
+                        .prostorija(Prostorija.builder().idProstorija(roomId).build())
+                        .user(User.builder().id(id).build())
+                        .build();
+
+                inventuraProstorijaUserRepository.save(inventuraProstorijaUser);
+            }
+        });
+
+        return model.toDTO();
     }
 
     @Override
@@ -88,16 +109,17 @@ public class InventuraServiceImpl implements InventuraService {
                 .map(User::getInventuras)
                 .orElse(List.of());
     }
+
     @Override
     public List<Inventura> getInventurasByUserIdByStanje(Integer userId) {
-         Optional<User> user = userRepository.findById(userId);
-         if(user.isEmpty()) {
-             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inventura not found");
-         }
-         return user.get().getInventuras()
-                    .stream()
-                    .filter(Inventura::getStanje)
-                    .toList();
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inventura not found");
+        }
+        return user.get().getInventuras()
+                .stream()
+                .filter(Inventura::getStanje)
+                .toList();
     }
 
     @Override
@@ -118,6 +140,7 @@ public class InventuraServiceImpl implements InventuraService {
         return inventuraRepository.findAll().stream().map(Inventura::toListDTO).toList();
 
     }
+
     @Override
     public List<InventuraStanjeDTO> getAllInventurasByStanje() {
         return inventuraRepository.findByStanjeTrue().stream()
@@ -130,7 +153,7 @@ public class InventuraServiceImpl implements InventuraService {
         if (inventura.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inventory not found");
         }
-        if(inventura.get().getStanje() == false){
+        if (inventura.get().getStanje() == false) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Inventory is already finished");
         }
 
@@ -139,13 +162,12 @@ public class InventuraServiceImpl implements InventuraService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Articles not found");
         }
 
-        if (prisutan){
+        if (prisutan) {
             if (!inventura.get().getPrisutniArtikli().contains(artikl.get())) {
                 inventura.get().getPrisutniArtikli().add(artikl.get());
                 inventuraRepository.save(inventura.get());
             }
-        }
-        else {
+        } else {
             inventura.get().getPrisutniArtikli().remove(artikl.get());
             inventuraRepository.save(inventura.get());
         }
@@ -156,7 +178,7 @@ public class InventuraServiceImpl implements InventuraService {
         if (inventura.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inventory not found");
         }
-        if(inventura.get().getStanje() == false){
+        if (inventura.get().getStanje() == false) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Inventory is already finished");
         }
 

@@ -15,7 +15,7 @@ public interface InventuraService {
     Optional<InventuraDTO> findById(Integer theId);
 
     Optional<InventuraDetailDTO> findByDetailId(Integer theId);
-    Inventura save(InventuraDTO dto);
+    InventuraDTO save(Probno dto);
 
     void deleteById(Integer theId);
 

@@ -39,46 +39,12 @@ public class ProstorijaController {
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-    @PostMapping("/save")
-    public ResponseEntity<ProstorijaUserDTO> saveProstorija(@RequestBody ProstorijaUserDTO prostorijaUserDTO) {
-        // Call the service method to save Prostorija with the users
-        Prostorija savedProstorija = prostorijaService.saveUserid(prostorijaUserDTO);
-
-        // Extract the user IDs from savedProstorija's users list
-        List<Integer> userIds = savedProstorija.getUsers().stream()
-                .map(User::getId)
-                .collect(Collectors.toList());
-
-        // Now pass the extracted user IDs to the toUserDTO method
-        ProstorijaUserDTO savedProstorijaDTO = savedProstorija.toUserDTO(userIds);
-
-        // Return the saved ProstorijaUserDTO in the response
-        return ResponseEntity.ok(savedProstorijaDTO);
-    }
-
-
 
     @PostMapping
     public Prostorija save(@RequestBody ProstorijaDTO prostorija) {
         return prostorijaService.save(prostorija);
     }
 
-    @PostMapping("/saveWithUsers")
-    public ResponseEntity<ProstorijaUserDTO> saveRoomWithUsers(@RequestBody ProstorijaUserDTO dto) {
-        Prostorija saved = prostorijaService.saveUserid(dto);
-
-        List<Integer> userIds = saved.getUsers().stream()
-                .map(User::getId)
-                .collect(Collectors.toList());
-    
-        ProstorijaUserDTO responseDTO = ProstorijaUserDTO.builder()
-                .idProstorija(saved.getIdProstorija())
-                .name(saved.getName())
-                .usersIds(userIds)
-                .build();
-
-        return ResponseEntity.ok(responseDTO);
-    }
 
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Integer id) {

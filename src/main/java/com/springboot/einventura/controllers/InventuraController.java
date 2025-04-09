@@ -34,8 +34,8 @@ public class InventuraController {
     }
 
     @PostMapping
-    public InventuraDTO save(@RequestBody InventuraDTO inventuraDTO) {
-        return inventuraService.save(inventuraDTO).toDTO();
+    public InventuraDTO save(@RequestBody Probno probno) {
+        return inventuraService.save(probno);
     }
     @GetMapping("/user/{userId}")
     public List<InventuraListDTO> getInventurasByUserId(@PathVariable Integer userId) {

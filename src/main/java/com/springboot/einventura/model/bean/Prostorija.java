@@ -34,14 +34,6 @@ public class Prostorija {
     @JoinColumn(name = "id_institution")
     private Institution institution;
 
-    @ManyToMany
-    @JoinTable(
-            name = "prostorija_user",
-            joinColumns = @JoinColumn(name = "id_prostorija"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private List<User> users = new ArrayList<>();
-
     @OneToMany
     @JoinColumn(name = "id_prostorija")
     private List<Artikl> artikli = new ArrayList<>();
@@ -82,14 +74,4 @@ public class Prostorija {
                 .build();
     }
 
-
-    public ProstorijaUserDTO toUserDTO(List<Integer> prisutniUser) {
-        return new ProstorijaUserDTO(
-                idProstorija,
-                name,
-                users.stream()
-                        .map(User::getId)
-                        .collect(Collectors.toList())
-        );
-    }
 }

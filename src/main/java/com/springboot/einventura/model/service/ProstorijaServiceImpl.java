@@ -2,9 +2,7 @@ package com.springboot.einventura.model.service;
 
 import com.springboot.einventura.model.DTO.ProstorijaDTO;
 import com.springboot.einventura.model.DTO.ProstorijaInstitucijaDTO;
-import com.springboot.einventura.model.DTO.ProstorijaUserDTO;
 import com.springboot.einventura.model.bean.Institution;
-import com.springboot.einventura.model.bean.User;
 import com.springboot.einventura.model.repository.InstitutionRepository;
 import com.springboot.einventura.model.repository.ProstorijaRepository;
 import com.springboot.einventura.model.bean.Prostorija;
@@ -15,9 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
+
 @Service
 
 public class ProstorijaServiceImpl implements ProstorijaService {
@@ -47,8 +45,7 @@ public class ProstorijaServiceImpl implements ProstorijaService {
 
         if (dto.getIdProstorija() == 0) {
             model = new Prostorija();
-        }
-        else {
+        } else {
             Optional<Prostorija> modelOpt = prostorijaRepository.findById(dto.getIdProstorija());
             if (!modelOpt.isPresent()) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -72,33 +69,14 @@ public class ProstorijaServiceImpl implements ProstorijaService {
     }
 
     @Override
-    public Prostorija saveUserid(ProstorijaUserDTO theProstorija) {
-        Prostorija model;
-
-        if (theProstorija.getIdProstorija() == 0) {
-            model = new Prostorija();
-        } else {
-            model = prostorijaRepository.findById(theProstorija.getIdProstorija())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Room not found"));
-        }
-        List<User> users = userRepository.findAllById(theProstorija.getUsersIds());
-        if (users.size() != theProstorija.getUsersIds().size()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Some users not found");
-        }
-        model.setUsers(users);
-        return prostorijaRepository.save(model);
-    }
-
-
-    @Override
     public void deleteById(Integer theId) {
         prostorijaRepository.deleteById(theId);
-   }
+    }
 
     @Override
     public List<Prostorija> getRoomsByInstitutionId(Integer idInstitution) {
         return null;
-   }
+    }
 
     @Override
     public ProstorijaInstitucijaDTO getInstitutionIdFromProstorijaId(Integer idProstorija) {
