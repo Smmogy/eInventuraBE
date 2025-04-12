@@ -23,8 +23,6 @@ public interface InventuraService {
 
     List<Inventura> getInventurasByUserIdByStanje(Integer userId);
 
-    void addUsersToInventura(Integer inventuraId, List<Integer> userIds);
-
     List<InventuraListDTO> getAllInventuras();
 
     List<InventuraStanjeDTO> getAllInventurasByStanje();

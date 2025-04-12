@@ -66,6 +66,9 @@ public class Inventura {
     private List<Artikl> prisutniArtikli;
 
     @OneToMany(mappedBy = "inventura", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<InventuraArtiklArchive> artiklArchives;
+
+    @OneToMany(mappedBy = "inventura", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<InventuraProstorijaUser> inventuraProstorijaUsers = new ArrayList<>();
 
     public InventuraDTO toDTO() {

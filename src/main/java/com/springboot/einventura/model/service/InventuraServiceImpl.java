@@ -78,7 +78,7 @@ public class InventuraServiceImpl implements InventuraService {
         model.setAkademskaGod(dto.getAkademskaGod());
         model.setNaziv(dto.getNaziv());
         model.setStanje(true);
-        
+
         inventuraRepository.save(model);
 
         dto.getRoomUserMap().forEach((roomId, userIds) -> {
@@ -120,19 +120,6 @@ public class InventuraServiceImpl implements InventuraService {
                 .stream()
                 .filter(Inventura::getStanje)
                 .toList();
-    }
-
-    @Override
-    public void addUsersToInventura(Integer inventuraId, List<Integer> userIds) {
-        Inventura inventura = inventuraRepository.findById(inventuraId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Inventura not found"));
-
-        List<User> users = userRepository.findAllById(userIds);
-        if (users.size() != userIds.size()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Some users not found");
-        }
-        inventura.getUsers().addAll(users);
-        inventuraRepository.save(inventura);
     }
 
     @Override
@@ -187,32 +174,30 @@ public class InventuraServiceImpl implements InventuraService {
                 .map(Artikl::getIdArtikl)
                 .toList();
 
-        List<Artikl> nePrisutniArtikls = artiklRepository
-                .findByProstorijaInstitutionIdInstitution(inventura.get().getInstitution().getIdInstitution())
-                .stream()
-                .filter((Artikl a) -> !prisutniAritkls.contains(a.getIdArtikl()))
-                .toList();
+        List<Artikl> allArtikls = artiklRepository
+                .findByProstorijaInstitutionIdInstitutionAndOtpisanFalse(inventura.get().getInstitution().getIdInstitution());
 
-        Institution institution = inventura.get().getInstitution();
-        List<Prostorija> prostorije = institution.getProstorijas();
-        Map<String, List<Integer>> prostorijaArtikliMap = new HashMap<>();
+        for (Artikl artikl : allArtikls) {
+            Boolean prisutan = prisutniAritkls.contains(artikl.getIdArtikl());
 
-        for (Prostorija prostorija : prostorije) {
+            if (!prisutan) {
+                artikl.setOtpisan(true);
+            }
 
-            List<Integer> allArtikls = artiklRepository.findByProstorijaIdProstorijaAndOtpisanFalse(prostorija.getIdProstorija())
-                    .stream()
-                    .map(Artikl::getIdArtikl)
-                    .toList();
+            InventuraArtiklArchive artiklArchive = InventuraArtiklArchive.builder()
+                    .inventura(inventura.get())
+                    .artikl(artikl)
+                    .prostorija(artikl.getProstorija())
+                    .pristuan(prisutan)
+                    .build();
 
-            ProstorijaArtiklDTO dto = new ProstorijaArtiklDTO(prostorija.getName(), allArtikls);
-            List<Artikl> artikli = artiklRepository.findAllById(allArtikls);
-            prostorija.setArtikli(artikli);
-            prostorijaRepository.save(prostorija);
+            inventura.get().getArtiklArchives().add(artiklArchive);
         }
 
-
-        nePrisutniArtikls.forEach((Artikl a) -> a.setOtpisan(true));
+        inventura.get().getPrisutniArtikli().clear();
         inventura.get().setStanje(false);
-        artiklRepository.saveAll(nePrisutniArtikls);
+
+        artiklRepository.saveAll(allArtikls);
+        inventuraRepository.save(inventura.get());
     }
 }

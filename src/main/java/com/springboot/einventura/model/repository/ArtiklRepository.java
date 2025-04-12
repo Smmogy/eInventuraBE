@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ArtiklRepository extends JpaRepository<Artikl, Integer> {
-   List<Artikl> findByProstorijaInstitutionIdInstitution(Integer idInstitution);
+   List<Artikl> findByProstorijaInstitutionIdInstitutionAndOtpisanFalse(Integer idInstitution);
 
    List<Artikl> findByProstorijaIdProstorijaAndOtpisanFalse(Integer idProstorija);
 
