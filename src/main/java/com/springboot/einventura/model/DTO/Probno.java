@@ -21,7 +21,6 @@ public class Probno {
     private String datumPocetka;
     private String datumZavrsetka;
     private Integer akademskaGod;
-    private List<Integer> usersIds;
     private Integer institutionId;
     private Boolean stanje;
     private Map<Integer, List<User>> roomUserMap;

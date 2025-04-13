@@ -51,14 +51,6 @@ public class Inventura {
 
     @ManyToMany
     @JoinTable(
-            name = "inventura_user",
-            joinColumns = @JoinColumn(name = "inventura_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private List<User> users = new ArrayList<>();
-
-    @ManyToMany
-    @JoinTable(
             name = "inventura_prisutan_artikl",
             joinColumns = @JoinColumn(name = "inventura_id"),
             inverseJoinColumns = @JoinColumn(name = "artikl_id")
@@ -78,9 +70,6 @@ public class Inventura {
                 datumPocetka,
                 datumZavrsetka,
                 akademskaGod,
-                users.stream()
-                        .map(User::getId)
-                        .collect(Collectors.toList()),
                 institution.getIdInstitution(),
                 stanje
         );

@@ -67,12 +67,6 @@ public class InventuraServiceImpl implements InventuraService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Institution not found");
         }
         model.setInstitution(institution.get());
-
-        List<User> users = userRepository.findAllById(dto.getUsersIds());
-        if (users.size() != dto.getUsersIds().size()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Some users not found");
-        }
-        model.setUsers(users);
         model.setDatumPocetka(dto.getDatumPocetka());
         model.setDatumZavrsetka(dto.getDatumZavrsetka());
         model.setAkademskaGod(dto.getAkademskaGod());
@@ -105,19 +99,21 @@ public class InventuraServiceImpl implements InventuraService {
 
     @Override
     public List<Inventura> getInventurasByUserId(Integer userId) {
-        return userRepository.findById(userId)
-                .map(User::getInventuras)
-                .orElse(List.of());
+        List<InventuraProstorijaUser> inventuraProstorijaUsers = inventuraProstorijaUserRepository.findByUserId(userId);
+        return inventuraProstorijaUsers
+                .stream()
+                .map(InventuraProstorijaUser::getInventura)
+                .distinct()
+                .toList();
     }
 
     @Override
     public List<Inventura> getInventurasByUserIdByStanje(Integer userId) {
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inventura not found");
-        }
-        return user.get().getInventuras()
+        List<InventuraProstorijaUser> inventuraProstorijaUsers = inventuraProstorijaUserRepository.findByUserId(userId);
+        return inventuraProstorijaUsers
                 .stream()
+                .map(InventuraProstorijaUser::getInventura)
+                .distinct()
                 .filter(Inventura::getStanje)
                 .toList();
     }

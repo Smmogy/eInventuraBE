@@ -33,19 +33,13 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Roles role;
 
-    @ManyToMany(mappedBy = "users")
-    private List<Inventura> inventuras;
-
     public UserDTO toDTO() {
         return new UserDTO(
                 id,
                 firstname,
                 lastname,
                 email,
-                password,
-                inventuras.stream()
-                        .map(Inventura::getIdInventura)
-                        .collect(Collectors.toList())
+                password
         );
     }
 
