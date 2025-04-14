@@ -2,6 +2,7 @@ package com.springboot.einventura.model.bean;
 
 import com.springboot.einventura.model.DTO.InventuraDTO;
 import com.springboot.einventura.model.DTO.UserDTO;
+import com.springboot.einventura.model.DTO.UserProstorijaDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,6 +41,14 @@ public class User implements UserDetails {
                 lastname,
                 email,
                 password
+        );
+    }
+
+    public UserProstorijaDTO toUserProstorijaDTO() {
+        return new UserProstorijaDTO(
+                id,
+                firstname,
+                lastname
         );
     }
 

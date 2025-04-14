@@ -51,6 +51,67 @@ public class InventuraServiceImpl implements InventuraService {
     }
 
     @Override
+    public ZavrsenaInventuraDTO findByZavsenaId(Integer idInventura) {
+        Optional<Inventura> inventura = inventuraRepository.findById(idInventura);
+        if (inventura.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inventory not found");
+        }
+
+        List<ProstorijaDTO> prostorijaDTOs = inventura.get().getArtiklArchives()
+                .stream()
+                .map(InventuraArtiklArchive::getProstorija)
+                .distinct()
+                .map(Prostorija::ToDTO).toList();
+
+        return ZavrsenaInventuraDTO.builder()
+                .idInventura(inventura.get().getIdInventura())
+                .akademskaGod(inventura.get().getAkademskaGod())
+                .datumPocetka(inventura.get().getDatumPocetka())
+                .datumZavrsetka(inventura.get().getDatumZavrsetka())
+                .naziv(inventura.get().getNaziv())
+                .institution(inventura.get().getInstitution().toDTO())
+                .prostorije(prostorijaDTOs)
+                .build();
+    }
+
+    @Override
+    public ZavrsenaInventraProstorijaDTO findByProstorijaId(Integer idInventura, Integer idProstorija) {
+        Optional<Inventura> inventura = inventuraRepository.findById(idInventura);
+        if (inventura.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inventory not found");
+        }
+
+        Optional<Prostorija> prostorija = prostorijaRepository.findById(idProstorija);
+        if (inventura.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inventory not found");
+        }
+
+        List<ArtiklInventuraDTO> artikls = inventura.get().getArtiklArchives()
+                .stream()
+                .filter(artiklArchive -> artiklArchive.getProstorija().getIdProstorija() == idProstorija)
+                .map(artiklArchive -> ArtiklInventuraDTO.builder()
+                        .idArtikl(artiklArchive.getArtikl().getIdArtikl())
+                        .name(artiklArchive.getArtikl().getName())
+                        .prisutan(artiklArchive.getPristuan())
+                        .build())
+                .toList();
+
+        List<UserProstorijaDTO> users = inventuraProstorijaUserRepository.findByInventuraIdInventuraAndProstorijaIdProstorija(idInventura, idProstorija)
+                .stream()
+                .map(InventuraProstorijaUser::getUser)
+                .map(User::toUserProstorijaDTO)
+                .toList();
+
+        return ZavrsenaInventraProstorijaDTO.builder()
+                .idProstorija(prostorija.get().getIdProstorija())
+                .name(prostorija.get().getName())
+                .artikls(artikls)
+                .users(users)
+                .build();
+
+    }
+
+    @Override
     @Transactional
     public InventuraDTO save(Probno dto) {
         Inventura model;
