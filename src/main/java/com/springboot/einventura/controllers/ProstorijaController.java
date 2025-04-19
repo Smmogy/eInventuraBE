@@ -29,19 +29,19 @@ public class ProstorijaController {
 
 
     @GetMapping
-    public List<Prostorija> findAll() {
+    public List<ProstorijaDTO> findAll() {
         return prostorijaService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Prostorija> findById(@PathVariable Integer id) {
+    public ResponseEntity<ProstorijaDTO> findById(@PathVariable Integer id) {
         return prostorijaService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Prostorija save(@RequestBody ProstorijaDTO prostorija) {
+    public ProstorijaDTO save(@RequestBody ProstorijaDTO prostorija) {
         return prostorijaService.save(prostorija);
     }
 
@@ -52,16 +52,17 @@ public class ProstorijaController {
     }
 
     @PutMapping("/{id}")
-    public Prostorija update(@RequestBody ProstorijaDTO prostorija) {
+    public ProstorijaDTO update(@RequestBody ProstorijaDTO prostorija) {
         return prostorijaService.save(prostorija);
     }
 
 
     @GetMapping("/institution/{id}")
-    public ResponseEntity<List<Prostorija>> getRoomsByInstitutionId(@PathVariable Integer id) {
+    public ResponseEntity<List<ProstorijaDTO>> getRoomsByInstitutionId(@PathVariable Integer id) {
         Optional<Institution> institution = institutionService.findById(id);
         return institution
-                .map(value -> ResponseEntity.ok(value.getProstorijas())).orElseGet(() -> ResponseEntity.notFound().build());
+                .map(value -> ResponseEntity.ok(value.getProstorijas().stream().map(Prostorija::ToDTO).toList()))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/institution-by-room/{idProstorija}")

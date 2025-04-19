@@ -9,15 +9,15 @@ import java.util.Optional;
 
 public interface ProstorijaService {
 
-    List<Prostorija> findAll();
+    List<ProstorijaDTO> findAll();
 
-    Optional<Prostorija> findById(Integer theId);
+    Optional<ProstorijaDTO> findById(Integer theId);
 
-    Prostorija save(ProstorijaDTO theProstorija);
+    ProstorijaDTO save(ProstorijaDTO theProstorija);
 
     void deleteById(Integer theId);
 
-    List<Prostorija> getRoomsByInstitutionId(Integer idInstitution);
+    List<ProstorijaDTO> getRoomsByInstitutionId(Integer idInstitution);
 
     ProstorijaInstitucijaDTO getInstitutionIdFromProstorijaId(Integer idProstorija);
 

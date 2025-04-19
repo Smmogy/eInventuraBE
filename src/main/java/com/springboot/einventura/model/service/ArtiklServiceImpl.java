@@ -25,22 +25,22 @@ public class ArtiklServiceImpl implements ArtiklService {
 
 
     @Override
-    public List<Artikl> findAll() {
-        return artiklRepository.findAll();
+    public List<ArtiklDTO> findAll() {
+        return artiklRepository.findAll().stream().map(Artikl::ToDTO).toList();
     }
 
     @Override
-    public Optional<Artikl> findById(Integer theId) {
-        return artiklRepository.findById(theId);
+    public Optional<ArtiklDTO> findById(Integer theId) {
+        return artiklRepository.findById(theId).map(Artikl::ToDTO);
     }
 
     @Override
-    public List<Artikl> findByProstorijaIdNeotpisani(Integer idProstorija) {
-        return artiklRepository.findByProstorijaIdProstorijaAndOtpisanFalse(idProstorija);
+    public List<ArtiklDTO> findByProstorijaIdNeotpisani(Integer idProstorija) {
+        return artiklRepository.findByProstorijaIdProstorijaAndOtpisanFalse(idProstorija).stream().map(Artikl::ToDTO).toList();
     }
 
     @Override
-    public Artikl save(ArtiklDTO dto) {
+    public ArtiklDTO save(ArtiklDTO dto) {
         Artikl model;
 
         if (dto.getIdArtikl() == 0) {
@@ -63,7 +63,7 @@ public class ArtiklServiceImpl implements ArtiklService {
 
         model.setName(dto.getName());
 
-        return artiklRepository.save(model);
+        return artiklRepository.save(model).ToDTO();
     }
 
     @Override

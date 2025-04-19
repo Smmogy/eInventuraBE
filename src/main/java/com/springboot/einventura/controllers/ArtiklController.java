@@ -28,19 +28,19 @@ public class ArtiklController {
     private ProstorijaService prostorijaService;
 
     @GetMapping
-    public List<Artikl> findAll() {
+    public List<ArtiklDTO> findAll() {
         return artiklService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Artikl> findById(@PathVariable Integer id) {
+    public ResponseEntity<ArtiklDTO> findById(@PathVariable Integer id) {
         return artiklService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Artikl save(@RequestBody ArtiklDTO artikl) {
+    public ArtiklDTO save(@RequestBody ArtiklDTO artikl) {
         return artiklService.save(artikl);
     }
 
@@ -48,13 +48,14 @@ public class ArtiklController {
     public void deleteById(@PathVariable Integer id) {
         artiklService.deleteById(id);
     }
+
     @PutMapping("/{id}")
-    public Artikl update(@RequestBody ArtiklDTO artikl) {
+    public ArtiklDTO update(@RequestBody ArtiklDTO artikl) {
         return artiklService.save(artikl);
     }
 
     @GetMapping("/get/{id}")
-    public List<Artikl> getArtiklsByProstorijaId(@PathVariable Integer id) {
+    public List<ArtiklDTO> getArtiklsByProstorijaId(@PathVariable Integer id) {
         return artiklService.findByProstorijaIdNeotpisani(id);
     }
 

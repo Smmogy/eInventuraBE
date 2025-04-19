@@ -29,7 +29,6 @@ public class Prostorija {
     @Column(name = "name")
     private String name;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_institution")
     private Institution institution;

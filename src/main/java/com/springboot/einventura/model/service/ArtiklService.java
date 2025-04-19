@@ -8,13 +8,13 @@ import java.util.Optional;
 
 public interface ArtiklService {
 
-    List<Artikl> findAll();
+    List<ArtiklDTO> findAll();
 
-    Optional<Artikl> findById(Integer theId);
+    Optional<ArtiklDTO> findById(Integer theId);
 
-    List<Artikl> findByProstorijaIdNeotpisani(Integer idProstorija);
+    List<ArtiklDTO> findByProstorijaIdNeotpisani(Integer idProstorija);
 
-    Artikl save(ArtiklDTO dto);
+    ArtiklDTO save(ArtiklDTO dto);
 
     void deleteById(Integer theId);
 

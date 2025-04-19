@@ -29,18 +29,18 @@ public class ProstorijaServiceImpl implements ProstorijaService {
 
 
     @Override
-    public List<Prostorija> findAll() {
-        return prostorijaRepository.findAll();
+    public List<ProstorijaDTO> findAll() {
+        return prostorijaRepository.findAll().stream().map(Prostorija::ToDTO).toList();
     }
 
     @Override
-    public Optional<Prostorija> findById(Integer theId) {
-        return prostorijaRepository.findById(theId);
+    public Optional<ProstorijaDTO> findById(Integer theId) {
+        return prostorijaRepository.findById(theId).map(Prostorija::ToDTO);
     }
 
     @Transactional
     @Override
-    public Prostorija save(ProstorijaDTO dto) {
+    public ProstorijaDTO save(ProstorijaDTO dto) {
         Prostorija model;
 
         if (dto.getIdProstorija() == 0) {
@@ -65,7 +65,7 @@ public class ProstorijaServiceImpl implements ProstorijaService {
 
         model.setName(dto.getName());
 
-        return prostorijaRepository.save(model);
+        return prostorijaRepository.save(model).ToDTO();
     }
 
     @Override
@@ -74,7 +74,7 @@ public class ProstorijaServiceImpl implements ProstorijaService {
     }
 
     @Override
-    public List<Prostorija> getRoomsByInstitutionId(Integer idInstitution) {
+    public List<ProstorijaDTO> getRoomsByInstitutionId(Integer idInstitution) {
         return null;
     }
 
