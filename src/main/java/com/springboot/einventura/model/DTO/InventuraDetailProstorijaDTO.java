@@ -11,9 +11,10 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ZavrsenaInventraProstorijaDTO {
+public class InventuraDetailProstorijaDTO {
     private Integer idProstorija;
     private String name;
+    private Boolean inventuraStanje;
     private List<ArtiklInventuraDTO> artikls;
     private List<UserProstorijaDTO> users;
 }

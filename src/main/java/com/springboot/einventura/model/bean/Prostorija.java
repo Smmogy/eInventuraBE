@@ -45,27 +45,6 @@ public class Prostorija {
         return new ProstorijaDTO(idProstorija, name, institution.getIdInstitution());
     }
 
-    public ProstorijaDetailDTO ToDetailDTO(List<Integer> prisutniAritkli) {
-        return new ProstorijaDetailDTO(
-                idProstorija,
-                name,
-                artikls.stream()
-                        .filter((Artikl a) -> !a.getOtpisan())
-                        .map((Artikl a) -> a.ToInventuraDTO(prisutniAritkli.contains(a.getIdArtikl())))
-                        .toList()
-        );
-    }
-
-    public ProstorijaArtiklDTO ToArtiklDTO(List<Integer> prisutniAritkli) {
-        return new ProstorijaArtiklDTO(
-                name,
-                artikls.stream()
-                        .map(Artikl::getIdArtikl)
-                        .toList()
-        );
-
-    }
-
     public ProstorijaInstitucijaDTO toProstorijaInstitucijaDTO() {
         return ProstorijaInstitucijaDTO.builder()
                 .idProstorija(this.idProstorija)

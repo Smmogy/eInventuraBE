@@ -17,7 +17,7 @@ public class InventuraDetailDTO {
     private String datumPocetka;
     private String datumZavrsetka;
     private Integer akademskaGod;
-    private InstitutionDetailDTO institution;
-    boolean stanje;
-
+    private Boolean stanje;
+    private InstitutionDTO institution;
+    private List<ProstorijaDTO> prostorije;
 }

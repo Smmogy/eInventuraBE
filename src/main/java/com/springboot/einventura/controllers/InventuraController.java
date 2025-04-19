@@ -2,11 +2,9 @@ package com.springboot.einventura.controllers;
 
 import com.springboot.einventura.model.DTO.*;
 import com.springboot.einventura.model.bean.Inventura;
-import com.springboot.einventura.model.bean.Prostorija;
 import com.springboot.einventura.model.service.InventuraService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -34,8 +32,8 @@ public class InventuraController {
     }
 
     @PostMapping
-    public InventuraDTO save(@RequestBody Probno probno) {
-        return inventuraService.save(probno);
+    public InventuraDTO save(@RequestBody InventuraCreateDTO inventuraCreateDTO) {
+        return inventuraService.save(inventuraCreateDTO);
     }
 
     @GetMapping("/user/{userId}")
@@ -57,10 +55,13 @@ public class InventuraController {
     }
 
     @GetMapping("/detail/{id}")
-    public ResponseEntity<InventuraDetailDTO> findByDetailId(@PathVariable Integer id) {
-        return inventuraService.findByDetailId(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public InventuraDetailDTO findByDetailId(@PathVariable Integer id) {
+        return inventuraService.findByDetailId(id);
+    }
+
+    @GetMapping("/detail/{inventuraId}/prostorija/{prostorijaId}")
+    public InventuraDetailProstorijaDTO findByDetailProstorijaId(@PathVariable Integer inventuraId, @PathVariable Integer prostorijaId) {
+        return inventuraService.findByDetailProstorijaId(inventuraId, prostorijaId);
     }
 
     @DeleteMapping("/{id}")

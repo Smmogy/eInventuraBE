@@ -12,13 +12,11 @@ public interface InventuraService {
 
     Optional<InventuraDTO> findById(Integer theId);
 
-    Optional<InventuraDetailDTO> findByDetailId(Integer theId);
+    InventuraDetailDTO findByDetailId(Integer theId);
 
-    ZavrsenaInventuraDTO findByZavsenaId(Integer theId);
+    InventuraDetailProstorijaDTO findByDetailProstorijaId(Integer idInventura, Integer idProstorija);
 
-    ZavrsenaInventraProstorijaDTO findByProstorijaId(Integer idInventura, Integer idProstorija);
-
-    InventuraDTO save(Probno dto);
+    InventuraDTO save(InventuraCreateDTO dto);
 
     void deleteById(Integer theId);
 

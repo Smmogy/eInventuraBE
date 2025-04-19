@@ -14,8 +14,7 @@ import java.util.Map;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Probno {
-
+public class InventuraCreateDTO {
     private Integer idInventura;
     private String naziv;
     private String datumPocetka;

@@ -87,18 +87,6 @@ public class Inventura {
 
     }
 
-    public InventuraDetailDTO toDetailDTO() {
-        return new InventuraDetailDTO(
-                idInventura,
-                naziv,
-                datumPocetka,
-                datumZavrsetka,
-                akademskaGod,
-                institution.toDetailDTO(prisutniArtikli.stream().map(Artikl::getIdArtikl).toList()),
-                stanje
-        );
-    }
-
     public InventuraStanjeDTO toStanjeDTO() {
         return new InventuraStanjeDTO(
                 idInventura,
@@ -111,5 +99,5 @@ public class Inventura {
         );
 
     }
-    
+
 }

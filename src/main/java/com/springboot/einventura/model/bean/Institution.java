@@ -1,9 +1,6 @@
 package com.springboot.einventura.model.bean;
 
 import com.springboot.einventura.model.DTO.InstitutionDTO;
-import com.springboot.einventura.model.DTO.InstitutionDetailDTO;
-import com.springboot.einventura.model.DTO.InventuraDTO;
-import com.springboot.einventura.model.DTO.ProstorijaDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,11 +42,5 @@ public class Institution {
                 prostorijas.stream()
                         .map(Prostorija::getIdProstorija)
                         .collect(Collectors.toList()));
-    }
-    public InstitutionDetailDTO toDetailDTO(List<Integer> prisutniAritkli) {
-        return new InstitutionDetailDTO(
-                idInstitution,
-                name,
-                prostorijas.stream().map((Prostorija p) -> p.ToDetailDTO(prisutniAritkli)).toList());
     }
 }
