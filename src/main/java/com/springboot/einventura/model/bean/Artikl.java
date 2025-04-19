@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name= "artikl")
+@Table(name = "artikl")
 public class Artikl {
 
 
@@ -33,14 +33,14 @@ public class Artikl {
     @Column(name = "otpisan")
     private Boolean otpisan = false;
 
-    @JsonIgnore
     @ManyToOne(cascade = {CascadeType.MERGE})
-    @JoinColumn(name ="id_prostorija")
+    @JoinColumn(name = "id_prostorija")
     private Prostorija prostorija;
 
     public ArtiklDTO ToDTO() {
         return new ArtiklDTO(idArtikl, name, prostorija.getIdProstorija());
     }
+
     public ArtiklInventuraDTO ToInventuraDTO(boolean prisutan) {
         return new ArtiklInventuraDTO(idArtikl, name, prisutan);
     }
