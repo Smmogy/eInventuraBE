@@ -9,7 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -33,12 +35,20 @@ public class Artikl {
     @Column(name = "otpisan")
     private Boolean otpisan = false;
 
+    @Column(name = "datum_kreiranja")
+    private Date datumKreiranja;
+
     @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "id_prostorija")
     private Prostorija prostorija;
 
     public ArtiklDTO ToDTO() {
-        return new ArtiklDTO(idArtikl, name, prostorija.getIdProstorija());
+        return new ArtiklDTO(
+                idArtikl,
+                name,
+                prostorija.getIdProstorija(),
+                datumKreiranja
+        );
     }
 
     public ArtiklInventuraDTO ToInventuraDTO(boolean prisutan) {

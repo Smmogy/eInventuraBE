@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,28 +44,32 @@ public class ArtiklServiceImpl implements ArtiklService {
     public ArtiklDTO save(ArtiklDTO dto) {
         Artikl model;
 
-        if (dto.getIdArtikl() == 0) {
+        if (dto.getIdArtikl() == null || dto.getIdArtikl() == 0) {
+            // Novi artikl
             model = new Artikl();
+            model.setDatumKreiranja(new Date()); // Postavljanje trenutnog vremena
         } else {
-            Optional<Artikl> modelOpt = artiklRepository.findById(dto.getIdArtikl());
-            if (!modelOpt.isPresent()) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            // Ažuriranje postojećeg artikla
+            Optional<Artikl> existingOpt = artiklRepository.findById(dto.getIdArtikl());
+            if (!existingOpt.isPresent()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Artikl nije pronađen.");
             }
-
-            model = modelOpt.get();
+            model = existingOpt.get();
+            // Zadržavanje postojećeg datuma kreiranja
         }
 
-        Optional<Prostorija> prostorija = prostorijaRepository.findById(dto.getIdProstorija());
-        if (!prostorija.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-
-        model.setProstorija(prostorija.get());
-
+        // Postavljanje ili ažuriranje ostalih polja
         model.setName(dto.getName());
+
+        Optional<Prostorija> prostorijaOpt = prostorijaRepository.findById(dto.getIdProstorija());
+        if (!prostorijaOpt.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Prostorija nije pronađena.");
+        }
+        model.setProstorija(prostorijaOpt.get());
 
         return artiklRepository.save(model).ToDTO();
     }
+
 
     @Override
     public void deleteById(Integer theId) {
