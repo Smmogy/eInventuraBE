@@ -82,7 +82,8 @@ public class Inventura {
                 datumPocetka,
                 datumZavrsetka,
                 akademskaGod,
-                institution.getName()
+                institution.getName(),
+                stanje
         );
 
     }

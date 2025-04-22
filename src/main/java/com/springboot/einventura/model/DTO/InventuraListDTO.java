@@ -18,4 +18,5 @@ public class InventuraListDTO {
     private String datumZavrsetka;
     private Integer akademskaGod;
     private String institutionName;
+    private Boolean stanje;
 }
