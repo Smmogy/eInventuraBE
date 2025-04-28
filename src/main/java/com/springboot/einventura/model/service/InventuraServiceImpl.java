@@ -212,7 +212,7 @@ public class InventuraServiceImpl implements InventuraService {
                 .toList();
     }
 
-    public void updateArticlePresence(int idArtikl, int idInventura, boolean prisutan) {
+    public ArtiklDTO updateArticlePresence(int idArtikl, int idInventura, boolean prisutan) {
         Optional<Inventura> inventura = inventuraRepository.findById(idInventura);
         if (inventura.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inventory not found");
@@ -235,6 +235,8 @@ public class InventuraServiceImpl implements InventuraService {
             inventura.get().getPrisutniArtikli().remove(artikl.get());
             inventuraRepository.save(inventura.get());
         }
+
+        return artikl.get().ToDTO();
     }
 
     public void zavrsiInventuru(int idInventura) {

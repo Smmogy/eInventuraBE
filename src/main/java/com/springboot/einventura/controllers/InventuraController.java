@@ -70,9 +70,9 @@ public class InventuraController {
     }
 
     @PostMapping("/update-article-presence")
-    public ResponseEntity updateArticlePresence(@RequestBody ArtiklPrisutanDTO artiklPrisutanDTO) {
-        inventuraService.updateArticlePresence(artiklPrisutanDTO.getIdArtikl(), artiklPrisutanDTO.getIdInventura(), artiklPrisutanDTO.getPrisutan());
-        return ResponseEntity.ok().build();
+    public ArtiklDTO updateArticlePresence(@RequestBody ArtiklPrisutanDTO artiklPrisutanDTO) {
+        ArtiklDTO artikl = inventuraService.updateArticlePresence(artiklPrisutanDTO.getIdArtikl(), artiklPrisutanDTO.getIdInventura(), artiklPrisutanDTO.getPrisutan());
+        return artikl;
     }
 
     @PostMapping("/zavrsi/{idInventura}")
