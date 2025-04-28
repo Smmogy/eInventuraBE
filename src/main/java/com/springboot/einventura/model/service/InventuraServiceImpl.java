@@ -226,6 +226,10 @@ public class InventuraServiceImpl implements InventuraService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Articles not found");
         }
 
+        if (artikl.get().getProstorija().getInstitution().getIdInstitution() != inventura.get().getInstitution().getIdInstitution()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Artikl in wrong institution");
+        }
+
         if (prisutan) {
             if (!inventura.get().getPrisutniArtikli().contains(artikl.get())) {
                 inventura.get().getPrisutniArtikli().add(artikl.get());
