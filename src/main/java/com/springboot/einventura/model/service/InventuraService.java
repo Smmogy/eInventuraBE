@@ -12,7 +12,7 @@ public interface InventuraService {
 
     Optional<InventuraDTO> findById(Integer theId);
 
-    InventuraDetailDTO findByDetailId(Integer theId);
+    InventuraDetailDTO findByDetailId(Integer theId, Integer userId);
 
     InventuraDetailProstorijaDTO findByDetailProstorijaId(Integer idInventura, Integer idProstorija);
 

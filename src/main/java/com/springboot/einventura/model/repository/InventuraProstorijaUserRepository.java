@@ -11,4 +11,6 @@ public interface InventuraProstorijaUserRepository extends JpaRepository<Inventu
 
     public List<InventuraProstorijaUser> findByInventuraIdInventuraAndProstorijaIdProstorija(Integer idInventura, Integer idProstorija);
 
+    public List<InventuraProstorijaUser> findByInventuraIdInventuraAndUserId(Integer idInventura, Integer id);
+
 }

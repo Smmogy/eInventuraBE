@@ -46,7 +46,7 @@ public class InventuraServiceImpl implements InventuraService {
     }
 
     @Override
-    public InventuraDetailDTO findByDetailId(Integer idInventura) {
+    public InventuraDetailDTO findByDetailId(Integer idInventura, Integer userId) {
         Optional<Inventura> inventura = inventuraRepository.findById(idInventura);
         if (inventura.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inventory not found");
@@ -55,9 +55,18 @@ public class InventuraServiceImpl implements InventuraService {
         List<ProstorijaDTO> prostorijaDTOs;
 
         if (inventura.get().getStanje()) { // true = aktivna
-            prostorijaDTOs = inventura.get().getInstitution().getProstorijas()
-                    .stream()
-                    .map(Prostorija::ToDTO).toList();
+            if (userId != null) { // show only rooms for given user
+                prostorijaDTOs = inventuraProstorijaUserRepository.findByInventuraIdInventuraAndUserId(idInventura, userId)
+                        .stream()
+                        .map(InventuraProstorijaUser::getProstorija)
+                        .map(Prostorija::ToDTO)
+                        .toList();
+            } else {
+                prostorijaDTOs = inventura.get().getInstitution().getProstorijas()
+                        .stream()
+                        .map(Prostorija::ToDTO)
+                        .toList();
+            }
         } else {
             prostorijaDTOs = inventura.get().getArtiklArchives()
                     .stream()

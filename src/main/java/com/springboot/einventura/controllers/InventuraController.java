@@ -2,13 +2,19 @@ package com.springboot.einventura.controllers;
 
 import com.springboot.einventura.model.DTO.*;
 import com.springboot.einventura.model.bean.Inventura;
+import com.springboot.einventura.model.bean.Roles;
+import com.springboot.einventura.model.bean.User;
 import com.springboot.einventura.model.service.InventuraService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -56,7 +62,15 @@ public class InventuraController {
 
     @GetMapping("/detail/{id}")
     public InventuraDetailDTO findByDetailId(@PathVariable Integer id) {
-        return inventuraService.findByDetailId(id);
+        Integer userId = null;
+
+        var user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (user.getRole() != Roles.ADMIN) {
+            userId = user.getId();
+        }
+
+        return inventuraService.findByDetailId(id, userId);
     }
 
     @GetMapping("/detail/{inventuraId}/prostorija/{prostorijaId}")
