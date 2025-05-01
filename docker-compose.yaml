@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: einventura-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: javolimpusitikurac
+      MYSQL_DATABASE: einventura
+    networks:
+      - einventura-net
+
+  backend:
+    image: smmogy/einventura-be
+    container_name: einventura-backend
+    environment:
+      WAITFORIT_HOST: mysql
+      WAITFORIT_PORT: 3306
+      WAITFORIT_TIMEOUT: 120
+      DB_URL: jdbc:mysql://mysql:3306/einventura
+      DB_USERNAME: root
+      DB_PASSWORD: javolimpusitikurac
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    networks:
+      - einventura-net
+
+  frontend:
+    image: smmogy/einventura-fe
+    container_name: einventura-frontend
+    environment:
+      BACKEND_URL: ${PUBLIC_IP}
+    ports: 
+     - "4200:4200"
+
+networks:
+  einventura-net:
+    driver: bridge
