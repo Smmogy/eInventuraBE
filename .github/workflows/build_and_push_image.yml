@@ -18,7 +18,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          context: "{{defaultContext}}:einventura-be"
+          context: "{{defaultContext}}"
           platforms: linux/arm64,linux/amd64
           tags: smmogy/einventura-be:latest
           push: true
