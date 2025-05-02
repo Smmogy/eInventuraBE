@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM --platform=$BUILDPLATFORM maven:3.9.6-eclipse-temurin-17 as builder
+FROM --platform=$BUILDPLATFORM maven as builder
 
 # Set working directory
 WORKDIR /app
@@ -11,7 +11,7 @@ COPY . .
 RUN mvn clean package -DskipTests
 
 # Stage 2: Run the application
-FROM --platform=$BUILDPLATFORM eclipse-temurin:17-jdk
+FROM --platform=$BUILDPLATFORM openjdk:8-jdk-alpine
 
 # Set working directory
 WORKDIR /app

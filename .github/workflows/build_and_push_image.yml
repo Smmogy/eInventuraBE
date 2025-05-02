@@ -19,6 +19,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: "{{defaultContext}}"
-          platforms: linux/arm64,linux/amd64
+          platforms: linux/arm64
           tags: smmogy/einventura-be:latest
           push: true
