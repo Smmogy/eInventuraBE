@@ -11,7 +11,7 @@ COPY . .
 RUN mvn clean package -DskipTests
 
 # Stage 2: Run the application
-FROM --platform=$BUILDPLATFORM openjdk:8-jdk-alpine
+FROM openjdk
 
 # Set working directory
 WORKDIR /app
