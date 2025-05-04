@@ -88,19 +88,5 @@ public class ArtiklServiceImpl implements ArtiklService {
         artiklRepository.save(artikl);
     }
 
-    @Override
-    public ArtiklDTO findProstorijaDTOByArtiklId(Integer idArtikl) {
-        Optional<Artikl> artikl = artiklRepository.findById(idArtikl);
-        if (artikl.isPresent()) {
-            return ArtiklDTO.builder()
-                    .idArtikl(artikl.get().getIdArtikl())
-                    .idProstorija(artikl.get().getProstorija().getIdProstorija())
-                    .name(artikl.get().getName()) // ako ti treba i ime
-                    .build();
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Artikl nije pronađen");
-        }
-    }
-
 }
 

@@ -59,10 +59,4 @@ public class ArtiklController {
         return artiklService.findByProstorijaIdNeotpisani(id);
     }
 
-    @GetMapping("/prostorija-dto/{idArtikl}")
-    public ResponseEntity<ArtiklDTO> getProstorijaDTOByArtiklId(@PathVariable Integer idArtikl) {
-        ArtiklDTO dto = artiklService.findProstorijaDTOByArtiklId(idArtikl);
-        return ResponseEntity.ok(dto);
-    }
-
 }

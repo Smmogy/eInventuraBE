@@ -20,6 +20,4 @@ public interface ArtiklService {
 
     void premjestiArtikl(Integer artiklId, Integer novaProstorijaId);
 
-    ArtiklDTO findProstorijaDTOByArtiklId(Integer idArtikl);
-
 }
