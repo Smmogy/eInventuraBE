@@ -16,18 +16,20 @@ public class AuthenticationController {
     private final AuthenticationService service;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(
+    public ResponseEntity<AuthenticationResponse> register(
             @RequestBody RegisterRequest request
-    ){
-        if (service.register(request).getToken() != null)
-           return ResponseEntity.ok(service.register(request).getToken());
+    ) {
+        var registerResult = service.register(request);
+        if (registerResult.getToken() != null)
+            return ResponseEntity.ok(registerResult);
         else
-            return new ResponseEntity<>("User already exists", HttpStatus.CONFLICT);
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
+
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> login(
             @RequestBody AuthenticationRequest request
-    ){
+    ) {
         return ResponseEntity.ok(service.authenticate(request));
     }
 }
