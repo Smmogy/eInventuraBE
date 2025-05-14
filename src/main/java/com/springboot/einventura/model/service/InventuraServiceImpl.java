@@ -1,5 +1,8 @@
 package com.springboot.einventura.model.service;
 
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.springboot.einventura.model.DTO.*;
 import com.springboot.einventura.model.bean.*;
 import com.springboot.einventura.model.repository.*;
@@ -8,8 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import com.itextpdf.text.Document;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -220,6 +231,61 @@ public class InventuraServiceImpl implements InventuraService {
                 .map(Inventura::toStanjeDTO)
                 .toList();
     }
+
+    @Override
+    public byte[] generateInventuraPdf(Integer idInventura) {
+        Optional<Inventura> inventuraOpt = inventuraRepository.findById(idInventura);
+        if (inventuraOpt.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inventura not found");
+        }
+        if (inventuraOpt.get().getStanje() == true) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Inventura nije zavšena");
+        }
+
+        Inventura inventura = inventuraOpt.get();
+
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            Document document = new Document();
+            PdfWriter.getInstance(document, out);
+            document.open();
+
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_DATE_TIME;
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            String formattedPocetak = ZonedDateTime.parse(inventura.getDatumPocetka(), inputFormatter)
+                    .format(outputFormatter);
+            String formattedZavrsetak = ZonedDateTime.parse(inventura.getDatumZavrsetka(), inputFormatter)
+                    .format(outputFormatter);
+
+            document.add(new Paragraph("Inventura: " + inventura.getNaziv()));
+            document.add(new Paragraph("Datum početka: " + formattedPocetak));
+            document.add(new Paragraph("Datum završetka: " + formattedZavrsetak));
+            document.add(new Paragraph("Akademska godina: " + inventura.getAkademskaGod()));
+            document.add(new Paragraph("Institucija: " + inventura.getInstitution().getName()));
+            document.add(new Paragraph(" "));
+
+            Map<Prostorija, List<InventuraArtiklArchive>> artikliPoProstoriji = inventura.getArtiklArchives().stream()
+                    .collect(Collectors.groupingBy(InventuraArtiklArchive::getProstorija));
+
+            for (Map.Entry<Prostorija, List<InventuraArtiklArchive>> entry : artikliPoProstoriji.entrySet()) {
+                String prostorijaName = entry.getKey().getName();
+                List<InventuraArtiklArchive> artikli = entry.getValue();
+
+                document.add(new Paragraph("Prostorija: " + prostorijaName));
+                for (InventuraArtiklArchive artikl : artikli) {
+                    document.add(new Paragraph("  - " + artikl.getArtikl().getName() + " - " + (artikl.getPristuan() ? "Prisutan" : "Nije prisutan")));
+                }
+                document.add(new Paragraph(" "));
+            }
+
+            document.close();
+            return out.toByteArray();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Greška pri generiranju PDF-a", e);
+        }
+    }
+
 
     public ArtiklDTO updateArticlePresence(int idArtikl, int idInventura, boolean prisutan) {
         Optional<Inventura> inventura = inventuraRepository.findById(idInventura);

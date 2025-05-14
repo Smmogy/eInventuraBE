@@ -31,4 +31,6 @@ public interface InventuraService {
     ArtiklDTO updateArticlePresence(int idArtikl, int idInventura, boolean prisutan);
 
     void zavrsiInventuru(int idInventura);
+
+    byte[] generateInventuraPdf(Integer idInventura);
 }

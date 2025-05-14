@@ -7,7 +7,7 @@ import com.springboot.einventura.model.bean.User;
 import com.springboot.einventura.model.service.InventuraService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -78,6 +78,7 @@ public class InventuraController {
         return inventuraService.findByDetailProstorijaId(inventuraId, prostorijaId);
     }
 
+
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Integer id) {
         inventuraService.deleteById(id);
@@ -93,5 +94,18 @@ public class InventuraController {
     public ResponseEntity zavrsiInventuru(@PathVariable int idInventura) {
         inventuraService.zavrsiInventuru(idInventura);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/pdf/{idInventura}")
+    public ResponseEntity<byte[]> getInventuraPdf(@PathVariable Integer idInventura) {
+        byte[] pdfBytes = inventuraService.generateInventuraPdf(idInventura);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(ContentDisposition.builder("attachment")
+                .filename("inventura_" + idInventura + ".pdf")
+                .build());
+
+        return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
     }
 }
