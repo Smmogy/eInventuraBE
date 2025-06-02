@@ -161,6 +161,10 @@ public class InventuraServiceImpl implements InventuraService {
         } else {
             model = inventuraRepository.findById(dto.getIdInventura())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+            if (model.getStanje() == false) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Inventura je završena");
+            }
         }
 
         Optional<Institution> institution = institutionRepository.findById(dto.getInstitutionId());
@@ -176,9 +180,14 @@ public class InventuraServiceImpl implements InventuraService {
 
         inventuraRepository.save(model);
 
-        dto.getRoomUserMap().forEach((roomId, userIds) -> {
-            for (User userId : userIds) {
-                Integer id = userId.getId();
+        if (model.getIdInventura() != 0)
+            inventuraProstorijaUserRepository.deleteByInventuraIdInventura(model.getIdInventura());
+
+        inventuraProstorijaUserRepository.flush();
+
+        dto.getRoomUserMap().forEach((roomId, users) -> {
+            for (UserDTO user : users) {
+                Integer id = user.getId();
 
                 InventuraProstorijaUser inventuraProstorijaUser = InventuraProstorijaUser.builder()
                         .inventura(model)

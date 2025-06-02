@@ -22,5 +22,5 @@ public class InventuraCreateDTO {
     private Integer akademskaGod;
     private Integer institutionId;
     private Boolean stanje;
-    private Map<Integer, List<User>> roomUserMap;
+    private Map<Integer, List<UserDTO>> roomUserMap;
 }

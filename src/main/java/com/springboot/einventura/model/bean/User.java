@@ -39,8 +39,7 @@ public class User implements UserDetails {
                 id,
                 firstname,
                 lastname,
-                email,
-                password
+                email
         );
     }
 

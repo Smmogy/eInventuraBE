@@ -1,5 +1,6 @@
 package com.springboot.einventura.model.DTO;
 
+import com.springboot.einventura.model.bean.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +21,7 @@ public class InventuraDTO {
     private Integer akademskaGod;
     private Integer institutionId;
     private Boolean stanje;
+    private Map<Integer, List<UserDTO>> roomUserMap;
 
 }
 

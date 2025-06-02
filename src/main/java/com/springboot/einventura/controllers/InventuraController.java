@@ -1,6 +1,7 @@
 package com.springboot.einventura.controllers;
 
 import com.springboot.einventura.model.DTO.*;
+import com.springboot.einventura.model.bean.Institution;
 import com.springboot.einventura.model.bean.Inventura;
 import com.springboot.einventura.model.bean.Roles;
 import com.springboot.einventura.model.bean.User;

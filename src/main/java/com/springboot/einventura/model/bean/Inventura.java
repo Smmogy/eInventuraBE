@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Data
@@ -64,6 +65,13 @@ public class Inventura {
     private List<InventuraProstorijaUser> inventuraProstorijaUsers = new ArrayList<>();
 
     public InventuraDTO toDTO() {
+        var roomUserMap = inventuraProstorijaUsers.stream()
+                .collect(Collectors.groupingBy(InventuraProstorijaUser::getProstorija))
+                .entrySet().stream().collect(Collectors.toMap(
+                        e -> e.getKey().getIdProstorija(),
+                        e -> e.getValue().stream().map(o -> o.getUser().toDTO()).collect(Collectors.toList())
+                ));
+
         return new InventuraDTO(
                 idInventura,
                 naziv,
@@ -71,7 +79,8 @@ public class Inventura {
                 datumZavrsetka,
                 akademskaGod,
                 institution.getIdInstitution(),
-                stanje
+                stanje,
+                roomUserMap
         );
     }
 
