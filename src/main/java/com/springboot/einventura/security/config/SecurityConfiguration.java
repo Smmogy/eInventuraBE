@@ -32,11 +32,9 @@ public class SecurityConfiguration {
                                     return corsConfiguration;
                                 }
                         ))
-                .csrf()
-                .disable()
+                .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("api/v1/auth/**")
-                .permitAll()
+                .requestMatchers("/error", "api/v1/auth/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
