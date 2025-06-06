@@ -1,7 +1,9 @@
 package com.springboot.einventura.model.service;
 
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.springboot.einventura.model.DTO.*;
 import com.springboot.einventura.model.bean.*;
@@ -11,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import com.itextpdf.text.Document;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -20,7 +21,9 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -247,43 +250,93 @@ public class InventuraServiceImpl implements InventuraService {
         if (inventuraOpt.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inventura not found");
         }
-        if (inventuraOpt.get().getStanje() == true) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Inventura nije zavšena");
+        if (inventuraOpt.get().getStanje()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Inventura nije završena");
         }
 
         Inventura inventura = inventuraOpt.get();
 
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-            Document document = new Document();
+            Document document = new Document(PageSize.A4, 50, 50, 50, 50);
             PdfWriter.getInstance(document, out);
             document.open();
 
+            BaseFont baseFont = BaseFont.createFont(
+                    InventuraServiceImpl.class.getClassLoader().getResource("fonts/NotoSans-Regular.ttf").toString(),
+                    BaseFont.IDENTITY_H,
+                    BaseFont.EMBEDDED
+            );
+
+            Font boldFont = new Font(baseFont, 12, Font.BOLD);
+            Font regularFont = new Font(baseFont, 11, Font.NORMAL);
+
+            // Header - Naziv institucije
+            Paragraph header = new Paragraph(inventura.getInstitution().getName(), boldFont);
+            header.setAlignment(Element.ALIGN_CENTER);
+            document.add(header);
+
+            // Naslov izvješća
+            Paragraph title = new Paragraph("Izvješće o obavljenoj inventuri", boldFont);
+            title.setSpacingBefore(10);
+            title.setSpacingAfter(20);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+
+            // Datum početka i završetka
             DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_DATE_TIME;
             DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-            String formattedPocetak = ZonedDateTime.parse(inventura.getDatumPocetka(), inputFormatter)
-                    .format(outputFormatter);
-            String formattedZavrsetak = ZonedDateTime.parse(inventura.getDatumZavrsetka(), inputFormatter)
-                    .format(outputFormatter);
+            String formattedPocetak = ZonedDateTime.parse(inventura.getDatumPocetka(), inputFormatter).format(outputFormatter);
+            String formattedZavrsetak = ZonedDateTime.parse(inventura.getDatumZavrsetka(), inputFormatter).format(outputFormatter);
 
-            document.add(new Paragraph("Inventura: " + inventura.getNaziv()));
-            document.add(new Paragraph("Datum početka: " + formattedPocetak));
-            document.add(new Paragraph("Datum završetka: " + formattedZavrsetak));
-            document.add(new Paragraph("Akademska godina: " + inventura.getAkademskaGod()));
-            document.add(new Paragraph("Institucija: " + inventura.getInstitution().getName()));
-            document.add(new Paragraph(" "));
+            document.add(new Paragraph("Datum početka: " + formattedPocetak, regularFont));
+            document.add(new Paragraph("Datum završetka: " + formattedZavrsetak, regularFont));
+            document.add(new Paragraph("Akademska godina: " + inventura.getAkademskaGod(), regularFont));
+            document.add(Chunk.NEWLINE);
 
-            Map<Prostorija, List<InventuraArtiklArchive>> artikliPoProstoriji = inventura.getArtiklArchives().stream()
-                    .collect(Collectors.groupingBy(InventuraArtiklArchive::getProstorija));
+            // Grupiranje artikala po prostorijama
+            Map<Prostorija, List<InventuraArtiklArchive>> artikliPoProstoriji =
+                    inventura.getArtiklArchives().stream().collect(Collectors.groupingBy(InventuraArtiklArchive::getProstorija));
 
             for (Map.Entry<Prostorija, List<InventuraArtiklArchive>> entry : artikliPoProstoriji.entrySet()) {
-                String prostorijaName = entry.getKey().getName();
+                Prostorija prostorija = entry.getKey();
                 List<InventuraArtiklArchive> artikli = entry.getValue();
 
-                document.add(new Paragraph("Prostorija: " + prostorijaName));
+                Paragraph prostorijaTitle = new Paragraph("Prostorija: " + prostorija.getName(), boldFont);
+                prostorijaTitle.setSpacingBefore(10);
+                prostorijaTitle.setSpacingAfter(5);
+                document.add(prostorijaTitle);
+
+                String osobeStr = inventura.getInventuraProstorijaUsers().stream()
+                        .filter(o -> o.getProstorija().getIdProstorija().equals(prostorija.getIdProstorija()))
+                        .map(p -> p.getUser())
+                        .map(u -> u.getFirstname() + " " + u.getLastname())
+                        .collect(Collectors.joining(", "));
+                document.add(new Paragraph("Djelatnici: " + osobeStr, regularFont));
+
+                PdfPTable table = new PdfPTable(4);
+                table.setWidthPercentage(100);
+                table.setSpacingBefore(5f);
+                table.setSpacingAfter(10f);
+                table.setWidths(new float[]{1f, 3f, 5f, 3f});
+
+                Stream.of("Rbr", "Inventarska oznaka", "Naziv artikla", "Status")
+                        .forEach(headerTitle -> {
+                            PdfPCell headerCell = new PdfPCell(new Phrase(headerTitle, boldFont));
+                            headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                            headerCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                            table.addCell(headerCell);
+                        });
+
+                int rbr = 1;
                 for (InventuraArtiklArchive artikl : artikli) {
-                    document.add(new Paragraph("  - " + artikl.getArtikl().getName() + " - " + (artikl.getPristuan() ? "Prisutan" : "Nije prisutan")));
+                    table.addCell(new Phrase(String.valueOf(rbr++), regularFont));
+                    table.addCell(new Phrase(artikl.getArtikl().getIdArtikl().toString(), regularFont));
+                    table.addCell(new Phrase(artikl.getArtikl().getName(), regularFont));
+                    String status = artikl.getPristuan() ? "Prisutan" : "Nije prisutan";
+                    table.addCell(new Phrase(status, regularFont));
                 }
-                document.add(new Paragraph(" "));
+
+                document.add(table);
             }
 
             document.close();
